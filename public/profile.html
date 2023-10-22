@@ -29,7 +29,7 @@
                         <a class="nav-link active" aria-current="page" href="/profile">Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/auth/logout">Logout</a>
+                        <a class="nav-link active" aria-current="page" href="/auth/confirmLogout">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -43,11 +43,11 @@
                         <img src="./avatar.png" class="avatar" alt="user profile picture">
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">John Doe</h5>
+                        <h5 id="name"></h5>
                         <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quasi
                             natus ullam explicabo vitae consectetur molestias aut esse, officiis labore sapiente
                             architecto numquam iste minus similique quos mollitia reprehenderit delectus?</p>
-                        <a href="#" class="btn btn-primary">john@email.com</a>
+                        <a href="#" class="email"></a>
                     </div>
                 </div>
             </div>
@@ -75,7 +75,8 @@
 
     </div>
     <script>
-    </script>
+        document.getElementById("name").innerHTML = data.name;
+      </script>
 </body>
 
 </html>

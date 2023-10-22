@@ -76,7 +76,7 @@ exports.isLoggedIn = async (req, res, next) => {
             const decoded = await promisify(jwt.verify)(req.cookies.userSave,
                 process.env.JWT_SECRET
             );
-            console.log(decoded);
+            console.log("decoded:"+ decoded);
 
             // 2. Check if the user still exist
             db.query('SELECT * FROM users WHERE id = ?', [decoded.id], (err, results) => {
@@ -84,7 +84,7 @@ exports.isLoggedIn = async (req, res, next) => {
                 if (!results) {
                     return next();
                 }
-                req.user = results[0];
+                res.user = results[0];
                 return next();
             });
         } catch (err) {
@@ -95,10 +95,14 @@ exports.isLoggedIn = async (req, res, next) => {
         next();
     }
 }
+exports.confirmLogout =(req,res) =>{
+    res.sendFile("confirm_logout.html", { root: './public/' });
+}
 exports.logout = (req, res) => {
     res.cookie('userSave', 'logout', {
         expires: new Date(Date.now() + 2 * 1000),
         httpOnly: true
     });
     res.status(200).redirect("/");
+    
 }
