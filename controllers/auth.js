@@ -16,7 +16,6 @@ exports.login = async (req, res) => {
             return res.status(400).sendFile("login.html", { root: './public/' }); //Email or password isn't fill in
         }
         db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
-            console.log(results);
             if (!results || !await bcrypt.compare(password, results[0].password)) {
                 res.status(401).sendFile("login.html", { root: './public/' }); //Incorrect email or password
             } else {
@@ -84,7 +83,7 @@ exports.isLoggedIn = async (req, res, next) => {
                 if (!results) {
                     return next();
                 }
-                res.user = results[0];
+                req.user = results[0];
                 return next();
             });
         } catch (err) {
@@ -105,4 +104,7 @@ exports.logout = (req, res) => {
     });
     res.status(200).redirect("/");
     
+}
+exports.getData =(req,res) =>{
+
 }

@@ -7,4 +7,7 @@ router.post('/register', authController.register)
 router.post('/login', authController.login);
 router.get('/confirmLogout', authController.confirmLogout);
 router.get('/logout', authController.logout);
+router.get('/data', authController.isLoggedIn, (req, res) => {
+    res.json(req.user);
+});
 module.exports = router;

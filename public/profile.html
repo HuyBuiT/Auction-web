@@ -47,7 +47,7 @@
                         <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quasi
                             natus ullam explicabo vitae consectetur molestias aut esse, officiis labore sapiente
                             architecto numquam iste minus similique quos mollitia reprehenderit delectus?</p>
-                        <a href="#" class="email"></a>
+                        <a href="#" id="email"></a>
                     </div>
                 </div>
             </div>
@@ -75,7 +75,15 @@
 
     </div>
     <script>
-        document.getElementById("name").innerHTML = data.name;
+        fetch('/auth/data', {
+        method: 'GET',
+        })
+        .then(response => response.json()) // Parse the response as JSON
+        .then(data => {
+        document.getElementById('name').textContent = data.name;
+        document.getElementById('email').textContent = data.email;
+    })
+        .catch(error => console.error('Error:', error));
       </script>
 </body>
 
