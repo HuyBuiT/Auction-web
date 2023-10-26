@@ -15,17 +15,16 @@ exports.login = async (req, res) => {
         if (!email || !password) {
             return res.status(400).sendFile("login.html", { root: './public/' }); //Email or password isn't fill in
         }
-        db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
-            if (!results || !await bcrypt.compare(password, results[0].password)) {
+        db.query('SELECT * FROM systemuser WHERE Email = ?', [email], async (err, results) => {
+            console.log("login ", results);
+            if (!results || !results[0] || !await bcrypt.compare(password, results[0].Pass)) {
                 res.status(401).sendFile("login.html", { root: './public/' }); //Incorrect email or password
             } else {
-                const id = results[0].id;
+                const ID = results[0].ID;
 
-                const token = jwt.sign({ id }, process.env.JWT_SECRET, {
+                const token = jwt.sign({ ID }, process.env.JWT_SECRET, {
                     expiresIn: process.env.JWT_EXPIRES_IN
                 });
-
-                console.log("the token is " + token);
 
                 const cookieOptions = {
                     expires: new Date(
@@ -42,14 +41,14 @@ exports.login = async (req, res) => {
     }
 }
 exports.register = (req, res) => {
-    console.log(req.body);
+    console.log("register", req.body);
     const { name, email, password, passwordConfirm } = req.body;
-    db.query('SELECT email from users WHERE email = ?', [email], async (err, results) => {
+    db.query('SELECT Email from systemuser WHERE Email = ?', [email], async (err, results) => {
         if (err) {
             console.log(err);
         } else {
             if (results.length > 0) {
-                return res.sendFile("register.html", { root: './public/' }); //The email is already in use
+                return res.sendFile("login.html", { root: './public/' }); //The email is already in use
             } else if (password != passwordConfirm) {
                 return res.sendFile("register.html", { root: './public/' }); //password dont match
             }
@@ -58,7 +57,7 @@ exports.register = (req, res) => {
         let hashedPassword = await bcrypt.hash(password, 8);
         console.log(hashedPassword);
 
-        db.query('INSERT INTO users SET ?', { name: name, email: email, password: hashedPassword }, (err, results) => {
+        db.query('INSERT INTO systemuser SET ?', { Name: name, Email: email, Pass: hashedPassword }, (err, results) => {
             if (err) {
                 console.log(err);
             } else {
@@ -75,12 +74,12 @@ exports.isLoggedIn = async (req, res, next) => {
             const decoded = await promisify(jwt.verify)(req.cookies.userSave,
                 process.env.JWT_SECRET
             );
-            console.log("decoded:"+ decoded);
-
+            console.log("decoded" ,decoded);
             // 2. Check if the user still exist
-            db.query('SELECT * FROM users WHERE id = ?', [decoded.id], (err, results) => {
-                console.log(results);
-                if (!results) {
+            db.query('SELECT * FROM systemuser WHERE ID = ?', [decoded.ID], (err, results) => {
+                console.log("IsloggedIN " ,results);
+                if (results.length === 0) {
+                    console.log("error with ID");
                     return next();
                 }
                 req.user = results[0];

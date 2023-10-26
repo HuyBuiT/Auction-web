@@ -80,8 +80,8 @@
         })
         .then(response => response.json()) // Parse the response as JSON
         .then(data => {
-        document.getElementById('name').textContent = data.name;
-        document.getElementById('email').textContent = data.email;
+        document.getElementById('name').textContent = data.Name;
+        document.getElementById('email').textContent = data.Email;
     })
         .catch(error => console.error('Error:', error));
       </script>
