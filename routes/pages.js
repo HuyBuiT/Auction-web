@@ -1,5 +1,5 @@
 const express = require("express");
-const authController = require("../controllers/auth");
+const authController = require("../controllers/user_auth");
 const router = express.Router();
 router.get('/',authController.isLoggedIn, (req, res) => {
     res.sendFile("main.html", { root: './public/' })

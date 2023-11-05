@@ -42,12 +42,7 @@
                     <div class="avatar-ctn">
                         <img src="./avatar.png" class="avatar" alt="user profile picture">
                     </div>
-                    <div class="card-body">
-                        <h5 id="name"></h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quasi
-                            natus ullam explicabo vitae consectetur molestias aut esse, officiis labore sapiente
-                            architecto numquam iste minus similique quos mollitia reprehenderit delectus?</p>
-                        <a href="#" id="email"></a>
+                    <div id="card-body">
                     </div>
                 </div>
             </div>
@@ -80,8 +75,10 @@
         })
         .then(response => response.json()) // Parse the response as JSON
         .then(data => {
-        document.getElementById('name').textContent = data.Name;
-        document.getElementById('email').textContent = data.Email;
+        let d='';
+        d += '<h5 id="name2">'+ 'Name: '+data.Name+'</h5>';
+        d += '<a href="#" id="email">'+ data.Email+'</a>';
+        document.getElementById('card-body').innerHTML=d;
     })
         .catch(error => console.error('Error:', error));
       </script>
