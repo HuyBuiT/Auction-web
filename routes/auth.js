@@ -10,21 +10,20 @@ router.post('/login', userController.login);
 router.get('/confirmLogout', userController.confirmLogout);
 router.get('/logout', userController.logout);
 router.get('/data', userController.isLoggedIn, (req, res) => {
-    console.log(req.user.ID);
     res.json(req.user);
 });
 
 // session
 router.get('/all_sessions', sessionController.getAllSessions);
 router.get('/session_by_name',sessionController.getSessionsByName);
-router.post('/delete_session_by_name', sessionController.deleteSessionByName);
-router.post('/add_session', sessionController.addNewSession);
-router.post('/update_session', sessionController.updateSessionById);
+router.post('/delete_session_by_name',userController.isLoggedIn, sessionController.deleteSessionByName);
+router.post('/add_session',userController.isLoggedIn, sessionController.addNewSession);
+router.post('/update_session',userController.isLoggedIn, sessionController.updateSessionById);
 
 //item
 router.post('/add_item',userController.isLoggedIn, itemController.addNewItem);
-router.post('/update_item', itemController.updateItemById);
+router.post('/update_item',userController.isLoggedIn, itemController.updateItemById);
 router.get('/all_items',itemController.getAllItems);
 router.get('/item_by_name', itemController.getItemsByName);
-router.post('/delete_item', itemController.deleteItemById);
+router.post('/delete_item',userController.isLoggedIn, itemController.deleteItemById);
 module.exports = router;

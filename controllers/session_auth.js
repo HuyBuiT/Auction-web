@@ -85,10 +85,16 @@ const deleteSessionByNameAsync = (name) => {
 // Use async/await to call the deleteSessionById function
 exports.deleteSessionByName = async (req, res) => {
     try {
+        if(req.user == null || req.user.isAdmin == 0){
+            
+            res.status(401).json({message: "Unauthorized"});
+        }
+        else{
         const name = req.body.name; // You should extract the session ID from the request as needed
         await deleteSessionByNameAsync(name);
         // Send a success response to the client
         res.status(200).json({ message: `Session with name ${name} has been deleted.` });
+        }
     } catch (err) {
         console.log(err);
         // Handle the error and send an appropriate error response
@@ -99,8 +105,8 @@ exports.deleteSessionByName = async (req, res) => {
 // Create a Promise-based function to add a new session
 const addNewSessionAsync = (sessionData) => {
     return new Promise((resolve, reject) => {
-        db.query('INSERT INTO sessions (ID, Session_date, Start_time, End_time, Name) VALUES (?, ?, ?, ?, ?)',
-            [sessionData.ID, sessionData.Session_date, sessionData.Start_time, sessionData.End_time, sessionData.Name],
+        db.query('INSERT INTO sessions (ID, Session_date, Start_time, End_time, admin_ID, Name) VALUES (?, ?, ?, ?, ?, ?)',
+            [sessionData.ID, sessionData.Session_date, sessionData.Start_time, sessionData.End_time,sessionData.admin_ID, sessionData.Name],
             (err, results) => {
                 if (err) {
                     console.log(err);
@@ -116,10 +122,18 @@ const addNewSessionAsync = (sessionData) => {
 // Use async/await to call the addNewSession function
 exports.addNewSession = async (req, res) => {
     try {
+        if(req.user == null || req.user.isAdmin == 0){
+            
+            res.status(401).json({message: "Unauthorized"});
+        }
+        else{
         const sessionData = req.body; // You should extract the session data from the request as needed
+        sessionData.admin_ID = req.user.ID;
+        console.log(sessionData);
         await addNewSessionAsync(sessionData);
         // Send a success response to the client
         res.status(200).json({'new session:': sessionData});
+        }
     } catch (err) {
         console.log(err);
         // Handle the error and send an appropriate error response
@@ -147,11 +161,17 @@ const updateSessionByIdAsync = (sessionId, newData) => {
 // Use async/await to call the updateSessionById function
 exports.updateSessionById = async (req, res) => {
     try {
+        if(req.user == null || req.user.isAdmin == 0){
+            
+            res.status(401).json({message: "Unauthorized"});
+        }
+        else{
         const { ID, ...updatedData } = req.body;
         console.log(ID);
         await updateSessionByIdAsync(ID, updatedData);
         // Send a success response to the client
         res.status(200).json({ message: `Session with ID ${ID} has been updated.` });
+        }
     } catch (err) {
         console.log(err);
         // Handle the error and send an appropriate error response

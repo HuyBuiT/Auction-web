@@ -23,7 +23,7 @@ const addNewItemAsync = (itemData) => {
 
 exports.addNewItem = async (req, res) => {
     try {
-        if(req.user == null){
+        if(req.user == null || req.user.isSeller == 0){
             
             res.status(401).json({message: "Unauthorized"});
         }
@@ -78,11 +78,17 @@ const updateItemByIdAsync = (itemId, newData) => {
 // Use async/await to call the updateItemById function
 exports.updateItemById = async (req, res) => {
     try {
+        if(req.user == null || req.user.isSeller == 0){
+            
+            res.status(401).json({message: "Unauthorized"});
+        }
+        else{
         const { ID, ...updatedData } = req.body;
         console.log("updated Data",updatedData);
         await updateItemByIdAsync(ID, updatedData);
         // Send a success response to the client
         res.status(200).json({ message: `Item with ID ${ID} has been updated.` });
+        }
     } catch (err) {
         console.log(err);
         // Handle the error and send an appropriate error response
@@ -170,10 +176,16 @@ const deleteItemByIdAsync = (itemId) => {
 // Use async/await to call the deleteItemById function
 exports.deleteItemById = async (req, res) => {
     try {
+        if(req.user == null || req.user.isSeller == 0){
+            
+            res.status(401).json({message: "Unauthorized"});
+        }
+        else{
         const itemId = req.body.ID; // You should extract the item ID from the request as needed
         await deleteItemByIdAsync(itemId);
         // Send a success response to the client
         res.status(200).json({ message: `Item with ID ${itemId} has been deleted.` });
+        }
     } catch (err) {
         console.log(err);
         // Handle the error and send an appropriate error response
