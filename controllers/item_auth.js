@@ -7,8 +7,8 @@ const db = mysql.createConnection({
 });
 const addNewItemAsync = (itemData) => {
     return new Promise((resolve, reject) => {
-        db.query('INSERT INTO item (Item_name, location, description, picture, startPrice, currentPrice, soldPrice, Category_ID, session_ID, seller_ID, Admin_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [itemData.Item_name, itemData.location, itemData.description, itemData.picture, itemData.startPrice, itemData.currentPrice, itemData.soldPrice, itemData.Category_ID, itemData.session_ID, itemData.seller_ID, itemData.Admin_ID],
+        db.query('INSERT INTO item (Item_name, location, description, picture, startPrice, currentPrice, soldPrice, Category_ID, session_ID, seller_ID, Admin_ID, Start_time = ?, End_time = ?) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [itemData.Item_name, itemData.location, itemData.description, itemData.picture, itemData.startPrice, itemData.currentPrice, itemData.soldPrice, itemData.Category_ID, itemData.session_ID, itemData.seller_ID, itemData.Admin_ID, itemData.Start_time, itemData.End_time],
             (err, results) => {
                 if (err) {
                     console.log(err);
@@ -192,3 +192,33 @@ exports.deleteItemById = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+const getAllItemsBySessionAsync =(session_ID) => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM item WHERE session_ID = ?', [session_ID], (err, results) => {
+            if (err) {
+                console.log(err);
+                reject(err);
+            } else {
+                if (results.length === 0) {
+                    console.log("No items found for the given session_ID.");
+                }
+                resolve(results);
+            }
+        });
+    });
+}
+
+exports.getAllItemsBySession = async(req,res) => {
+    try {
+        const session_ID = req.body.session_ID; // You should extract the item name from the request as needed
+        const results = await getAllItemsBySessionAsync(session_ID);
+
+        // Send the response to the client (res.send or res.json, depending on your framework)
+        res.status(200).json({ items: results });
+    } catch (err) {
+        console.log(err);
+        // Handle the error and send an appropriate response
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
