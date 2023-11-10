@@ -211,7 +211,8 @@ const getAllItemsBySessionAsync =(session_ID) => {
 
 exports.getAllItemsBySession = async(req,res) => {
     try {
-        const session_ID = req.body.session_ID; // You should extract the item name from the request as needed
+        const session_ID = req.params.session_ID; // You should extract the item name from the request as needed
+
         const results = await getAllItemsBySessionAsync(session_ID);
 
         // Send the response to the client (res.send or res.json, depending on your framework)
