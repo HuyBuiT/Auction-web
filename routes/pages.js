@@ -24,7 +24,8 @@ router.get('/home', authController.isLoggedIn, (req, res) => {
         res.sendFile("login.html", { root: './public/' });
     }
 })
-router.get('/items',authController.isLoggedIn, (req,res) =>{
+router.get('/items/:session_ID', (req,res) =>{
     res.sendFile("items.html", {root: './public/'});
 })
+
 module.exports = router;

@@ -17,6 +17,16 @@
             margin-top: 3%;
             text-align: center;
         }
+        .sessionTable {
+            width: 100%;
+
+        }
+        .tr {
+            width: 100%;
+        }
+        .header {
+            background-color: green;
+        }
     </style>
 </head>
 
@@ -42,18 +52,31 @@
             Internet Explorer, you will need to download Chrome, Firefox or Edge to continue bidding and buying homes on
             our website. Auction.com no longer supports Internet Explorer.</p>
     </div>
-
+    <a href=""></a>
+    <table></table>
     <div id="content"></div>
+    
+
     <script>
         fetch('/auth/all_sessions', {
             method: 'GET',
         })
             .then(response => response.json()) // Parse the response as JSON
             .then(data => {
-                let d = '';
-                $.each(data["sessions"],function(e, v){            
-                    d += '<p>' + v['Name'] + '</p>'
+                let d = '<table class="sessionTable">';
+                    d += '<thead class = "header"> <tr> <th>ID</th> <th>Name</th> <th>Start Time</th> <th>End Time</th> </tr> </thead> <tbody>'
+                $.each(data["sessions"],function(e, v){   
+                    d += '<tr>'   
+                    d += '<th>' + '<a id ="' + v['ID'] + '" href="/items/' + v['ID'] + '">' + v['ID'] + '</th>'
+                        d += '<th>' + '<a id ="' + v['ID'] + '" href="/items/' + v['ID'] + '">' + v['Name'] + '</th>'
+                            d += '<th>' + '<a id ="' + v['ID'] + '" href="/items/' + v['ID'] + '">' + v['Start_time'] + '</th>'
+                                d += '<th>' + '<a id ="' + v['ID'] + '" href="/items/' + v['ID'] + '">' + v['End_time'] + '</th>'
+                
+                    
+                    d += '</tr>'
+                    
                 })
+                d += '</tbody></table>'
                 $('#content').html(d);
             })
             .catch(error => console.error('Error:', error));

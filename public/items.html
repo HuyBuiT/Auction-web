@@ -1,32 +1,46 @@
 <!-- items.html -->
 <html>
+
 <head>
   <title>Auction Items</title>
 </head>
+
 <body>
   <h1>Auction Items</h1>
-  <ul id="itemsList"></ul>
+  <div id="itemsList"></div>
 
   <script>
-    const session_ID = 2; // Replace with your actual session ID or retrieve dynamically
-  
+    //const session_ID = req.params.session_ID; // Replace with your actual session ID or retrieve dynamically
+    const pathArray = window.location.pathname.split('/');
+    const session_ID = pathArray[pathArray.length - 1];
+
+    console.log(session_ID);
+    console.log(session_ID);
     // Fetch items data from the server
     fetch(`/auth/item_by_session/${session_ID}`, {
-        method: 'GET',
+      method: 'GET',
     })
-    .then(response => response.json())
-    .then(responseData => {
-      // Ensure that items is an array
-      const items = Array.isArray(responseData.items) ? responseData.items : [];
-        
+      .then(response => response.json())
+      .then(responseData => {
+        // Ensure that items is an array
+        const items = Array.isArray(responseData.items) ? responseData.items : [];
+        console.log(items);
+        let d = ''
         // Update HTML with items data
         items.forEach(item => {
-            const listItem = document.createElement('li');
-            listItem.textContent = item.Item_name;
-            itemsList.appendChild(listItem);
+          
+          
+          d += '<a id ="' + item.ID + '" href="/items/' + item.ID + '">'
+          d += '<p>' + item.Item_name + '</p>'
+          d += '<img src="' + item.picture + '">'
+          d += '</a>'
+
+
         });
-    })
-    .catch(error => console.error('Error fetching items:', error));
+        document.getElementById('itemsList').innerHTML += d;
+      })
+      .catch(error => console.error('Error fetching items:', error));
   </script>
 </body>
+
 </html>
