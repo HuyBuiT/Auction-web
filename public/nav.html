@@ -1,6 +1,19 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<style>
+    .registerAndLogin {
+        display: inline;
+        float: right;
+    }
+    a.nav-link {
+        color: white;
+    }
+    a.nav-link:hover{
+        color: #05EDBC;
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg" style="background: linear-gradient(90deg, #0586EC 0%, #531BB0 100%);">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand"><img class="img-fluid" width="40px" height="40px" src="./Logo.svg"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
@@ -14,9 +27,19 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/profile">Profile</a>
                 </li>
+              
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/auth/confirmLogout">Logout</a>
                 </li>
+                
+                    <li class="nav-item navbar-right">
+                        <a class="nav-link active " aria-current="page" href="/register">Register</a>
+                    </li>
+                    <li class="nav-item  navbar-right">
+                        <a class="nav-link active" aria-current="page" href="/login">Login</a>
+                    </li>
+               
+                
             </ul>
         </div>
     </div>

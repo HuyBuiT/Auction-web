@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Session</title>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,6 +50,15 @@
     </style>
 </head>
 <body>
+    <div id="nav-placeholder">
+
+    </div>
+
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
     <h1> Add new session</h1>
     <form id="addSessionForm">
         <label for="Name">Name:</label>

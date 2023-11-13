@@ -2,8 +2,19 @@
 <html>
 <head>
     <title>Logout Confirmation</title>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+
 </head>
 <body>
+    <div id="nav-placeholder">
+
+    </div>
+
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
     <h2>Are you sure you want to log out?</h2>
     <button id="confirmLogout">Confirm Logout</button>
     <a href="/">Cancel</a>

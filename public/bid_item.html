@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Item Display</title>
+    <title>Item Display</title>    <script src="//code.jquery.com/jquery.min.js"></script>
+
     <style>
         /* Your styles here */
         body {
@@ -58,6 +59,15 @@
     </style>
 </head>
 <body>
+    <div id="nav-placeholder">
+
+    </div>
+
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
     <div class="container">
         <h1>Item Details</h1>
         <div class="item" id="itemContainer">

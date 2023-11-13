@@ -16,10 +16,7 @@
     <div id="nav-placeholder">
     </div>
     
-    <script>
-    $(function(){
-      $("#nav-placeholder").load("nav.html");
-    });
+  
     </script>
     <div class="container my-5">
         <div class="row">
@@ -68,6 +65,11 @@
     })
         .catch(error => console.error('Error:', error));
       </script>
+        <script>
+            $(function(){
+              $("#nav-placeholder").load("nav.html");
+            });
+            </script>
 </body>
 
 </html>
