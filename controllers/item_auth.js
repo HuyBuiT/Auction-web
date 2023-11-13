@@ -7,7 +7,7 @@ const db = mysql.createConnection({
 });
 const addNewItemAsync = (itemData) => {
     return new Promise((resolve, reject) => {
-        db.query('INSERT INTO item (Item_name, location, description, picture, startPrice, currentPrice, soldPrice, Category_ID, session_ID, seller_ID, Admin_ID, Start_time = ?, End_time = ?) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        db.query('INSERT INTO item (Item_name, location, description, picture, startPrice, currentPrice, soldPrice, Category_ID, session_ID, seller_ID, Admin_ID, Start_time, End_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [itemData.Item_name, itemData.location, itemData.description, itemData.picture, itemData.startPrice, itemData.currentPrice, itemData.soldPrice, itemData.Category_ID, itemData.session_ID, itemData.seller_ID, itemData.Admin_ID, itemData.Start_time, itemData.End_time],
             (err, results) => {
                 if (err) {
@@ -23,7 +23,7 @@ const addNewItemAsync = (itemData) => {
 
 exports.addNewItem = async (req, res) => {
     try {
-        if(req.user == null || req.user.isSeller == 0){
+        if(req.user == null || req.user.isSeller == 0 || req.user.isSeller == null){
             
             res.status(401).json({message: "Unauthorized"});
         }
@@ -127,15 +127,15 @@ exports.getAllItems = async (req, res) => {
 };
 
 // Create a Promise-based function to get items by name
-const getItemsByNameAsync = (name) => {
+const getItemsByIDAsync = (ID) => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM item WHERE Item_name = ?', [name], (err, results) => {
+        db.query('SELECT * FROM item WHERE ID = ?', [ID], (err, results) => {
             if (err) {
                 console.log(err);
                 reject(err);
             } else {
                 if (results.length === 0) {
-                    console.log("No items found for the given name.");
+                    console.log("No items found for the given ID.");
                 }
                 resolve(results);
             }
@@ -144,10 +144,10 @@ const getItemsByNameAsync = (name) => {
 };
 
 // Use async/await to call the getItemsByName function
-exports.getItemsByName = async (req, res) => {
+exports.getItemsByID = async (req, res) => {
     try {
-        const name = req.body.name; // You should extract the item name from the request as needed
-        const results = await getItemsByNameAsync(name);
+        const ID = req.params.item_ID; // You should extract the item name from the request as needed
+        const results = await getItemsByIDAsync(ID);
 
         // Send the response to the client (res.send or res.json, depending on your framework)
         res.status(200).json({ items: results });

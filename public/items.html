@@ -10,7 +10,6 @@
   <div id="itemsList"></div>
 
   <script>
-    //const session_ID = req.params.session_ID; // Replace with your actual session ID or retrieve dynamically
     const pathArray = window.location.pathname.split('/');
     const session_ID = pathArray[pathArray.length - 1];
 
@@ -30,7 +29,7 @@
         items.forEach(item => {
           
           
-          d += '<a id ="' + item.ID + '" href="/items/' + item.ID + '">'
+          d += '<a id ="' + item.ID + '" href="/bid_item/' + item.ID + '">'
           d += '<p>' + item.Item_name + '</p>'
           d += '<img src="' + item.picture + '">'
           d += '</a>'

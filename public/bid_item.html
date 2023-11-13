@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Display</title>
+    <style>
+        /* Your styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .item {
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .item-details {
+            margin-top: 15px;
+        }
+
+        .item-details label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .item-details span {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Item Details</h1>
+        <div class="item" id="itemContainer">
+            <!-- Item details will be inserted here -->
+        </div>
+    
+    </div>
+    <script>
+        // Extract item ID from the URL
+        const pathArray = window.location.pathname.split('/');
+        const item_ID = pathArray[pathArray.length - 1];
+        console.log(item_ID);
+        // Fetch item data from the server
+       // Fetch item data from the server
+    fetch(`/auth/item_by_ID/${item_ID}`, {
+        method: 'GET',
+    })
+        .then(response => response.json())
+        .then(responseData => {
+            // Ensure that items is an array
+            const items = Array.isArray(responseData.items) ? responseData.items : [];
+
+            // Check if there's at least one item
+            if (items.length > 0) {
+                const item = items[0];
+
+                // Update HTML with item data
+                const itemContainer = document.getElementById('itemContainer');
+
+                const html = `
+                    <img src="${item.picture}" alt="Item Image">
+                    <div class="item-details">
+                        <label>ID:</label>
+                        <span>${item.ID}</span>
+                        <label>Item Name:</label>
+                        <span>${item.Item_name}</span>
+                        <label>Location:</label>
+                        <span>${item.location}</span>
+                        <label>Description:</label>
+                        <span>${item.description}</span>
+                        <label>Start Price:</label>
+                        <span>${item.startPrice}</span>
+                        <label>Current Price:</label>
+                        <span>${item.currentPrice}</span>
+                        <label>Sold Price:</label>
+                        <span>${item.soldPrice}</span>
+                        <!-- Add more details as needed -->
+                    </div>
+                `;
+                itemContainer.innerHTML = html;
+            } else {
+                console.error('No item found with the given ID');
+            }
+        })
+        .catch(error => console.error('Error fetching item details:', error));
+
+    </script>
+    
+</body>
+</html>

@@ -24,8 +24,16 @@ router.get('/home', authController.isLoggedIn, (req, res) => {
         res.sendFile("login.html", { root: './public/' });
     }
 })
-router.get('/items/:session_ID', (req,res) =>{
+router.get('/items/:session_ID', (req,res) =>{  //get list of item by sessionID
     res.sendFile("items.html", {root: './public/'});
 })
-
+router.get('/bid_item/:item_ID',(req,res) =>{
+    res.sendFile("bid_item.html", {root: './public/'});
+})
+router.get('/add_session',(req,res) => {
+    res.sendFile("add_session.html",{root: './public/'});
+})
+router.get('/add_item',(req,res) => {
+    res.sendFile("add_item.html",{root: './public/'});
+})
 module.exports = router;

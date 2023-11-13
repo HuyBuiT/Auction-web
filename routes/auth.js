@@ -24,7 +24,7 @@ router.post('/update_session',userController.isLoggedIn, sessionController.updat
 router.post('/add_item',userController.isLoggedIn, itemController.addNewItem);
 router.post('/update_item',userController.isLoggedIn, itemController.updateItemById);
 router.get('/all_items',itemController.getAllItems);
-router.get('/item_by_name', itemController.getItemsByName);
+router.get('/item_by_ID/:item_ID', itemController.getItemsByID);
 router.get('/item_by_session/:session_ID', itemController.getAllItemsBySession);
 router.post('/delete_item',userController.isLoggedIn, itemController.deleteItemById);
 module.exports = router;
