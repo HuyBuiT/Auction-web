@@ -41,20 +41,20 @@
             If you are attempting to access our website from within one of the countries listed above and are using
             Internet Explorer, you will need to download Chrome, Firefox or Edge to continue bidding and buying homes on
             our website. Auction.com no longer supports Internet Explorer.</p>
-
     </div>
 
-
+    <div id="content"></div>
     <script>
-        fetch('/auth/data', {
+        fetch('/auth/all_sessions', {
             method: 'GET',
         })
             .then(response => response.json()) // Parse the response as JSON
             .then(data => {
                 let d = '';
-                d += '<h5 id="name2">' + 'Name: ' + data.Name + '</h5>';
-                d += '<a href="#" id="email">' + data.Email + '</a>';
-                document.getElementById('card-body').innerHTML = d;
+                $.each(data["sessions"],function(e, v){            
+                    d += '<p>' + v['Name'] + '</p>'
+                })
+                $('#content').html(d);
             })
             .catch(error => console.error('Error:', error));
     </script>

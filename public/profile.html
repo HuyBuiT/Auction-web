@@ -14,7 +14,6 @@
 
 <body>
     <div id="nav-placeholder">
-
     </div>
     
     <script>
@@ -65,7 +64,7 @@
         let d='';
         d += '<h5 id="name2">'+ 'Name: '+data.Name+'</h5>';
         d += '<a href="#" id="email">'+ data.Email+'</a>';
-        document.getElementById('card-body').innerHTML=d;
+        $('#card-body').html(d);
     })
         .catch(error => console.error('Error:', error));
       </script>
