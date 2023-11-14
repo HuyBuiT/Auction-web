@@ -11,21 +11,39 @@
     <link rel="stylesheet" href="./style.css">
     <script src="//code.jquery.com/jquery.min.js"></script>
     <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        
+        
         #introduction {
             width: 70%;
             margin-left: 15%;
             margin-top: 3%;
             text-align: center;
         }
-        .sessionTable {
-            width: 100%;
 
+        .sessionTable {
+            width: 90%;
+            margin: 0 5%;
         }
-        .tr {
-            width: 100%;
+        .thID{
+            width: 10%;
         }
-        .header {
-            background-color: green;
+
+        .thName{
+            width: 20%;
+        }
+        .thStatus{
+            width: 20%;
+        }
+
+        
+        .tableHeader {
+            background: linear-gradient(90deg, #0586EC 0%, #531BB0 100%);
+            color: white;
         }
     </style>
 </head>
@@ -37,7 +55,7 @@
 
     <script>
         $(function () {
-            $("#nav-placeholder").load("nav.html");
+            $("#nav-placeholder").load("navAfterLogin.html");
         });
     </script>
 
@@ -55,7 +73,7 @@
     <a href=""></a>
     <table></table>
     <div id="content"></div>
-    
+
 
     <script>
         fetch('/auth/all_sessions', {
@@ -64,17 +82,17 @@
             .then(response => response.json()) // Parse the response as JSON
             .then(data => {
                 let d = '<table class="sessionTable">';
-                    d += '<thead class = "header"> <tr> <th>ID</th> <th>Name</th> <th>Session Date(mm/dd/yyyy)</th> <th>Status</th> </tr> </thead> <tbody>'
-                $.each(data["sessions"],function(e, v){   
-                    d += '<tr>'   
+                d += '<thead class = "tableHeader"> <tr> <th class="thID">ID</th> <th  class="thName">Name</th> <th  class="thSessionDate">Session Date(mm/dd/yyyy)</th> <th  class="thStatus">Status</th> </tr> </thead> <tbody>'
+                $.each(data["sessions"], function (e, v) {
+                    d += '<tr>'
                     d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['ID'] + '</th>'
-                        d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Name'] + '</th>'
-                            d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Session_date'] + '</th>'
-                                d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Status'] + '</th>'
-                 
-                    
+                    d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Name'] + '</th>'
+                    d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Session_date'] + '</th>'
+                    d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Status'] + '</th>'
+
+
                     d += '</tr>'
-                    
+
                 })
                 d += '</tbody></table>'
                 $('#content').html(d);

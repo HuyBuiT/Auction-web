@@ -8,29 +8,76 @@
   <script src="//code.jquery.com/jquery.min.js"></script>
 
   <style>
-    .itemHeader {
-      background-color: black;
+    p
+    .nav-link.active {
       color: white;
+    }
+    .table,.table th,.table td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+
+    .tableHeader {
+      background: linear-gradient(90deg, #0586EC 0%, #531BB0 100%);
+      color: white;
+    }
+    .table{
+
+      width: 100%;
+      text-align: center;
+      
+    }
+    td {
+      vertical-align:middle
     }
 
     .table-item {
       margin-top: 10px;
+      
     }
+    p, a {
+      font-size: 1.2rem;
+    }
+    a.itemName {
+      text-decoration: none;
+      color: blue;
+    }
+
+    .itemDescription{
+
+    }
+
+    .itemLocation{
+
+    }
+
+    .itemSaleInfo{}
+
+    .bid-button {
+      display: inline-block;
+      background-color: green;
+      color: white;
+      padding: 10px 15px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 14px;
+      border-radius: 5px;
+    }
+
   </style>
 </head>
 
 <body>
   <div id="nav-placeholder">
-
   </div>
-
+  <script>$(function () {
+    $("#nav-placeholder").load("navAfterLogin.html");
+  });</script>
   <h1>Auction Items</h1>
   <div id="itemsList" class="container"></div>
 
   <script>
-   $(function () {
-      $("#nav-placeholder").load("nav.html");
-    });
+    
 
 
     const pathArray = window.location.pathname.split('n');
@@ -42,15 +89,17 @@
     })
       .then(response => response.json())
       .then(responseData => {
-        let d=''
+        let d = ''
         // Ensure that items is an array
-        d += '<table> <thead class="itemHeader"><tr>     <th>Image</th> <th>Name</th>  <th>Start_time</th> <th>End_time</th> <th>Action</th> </tr> </thead><tbody>'
+        d += '<table class="table"> <thead class="tableHeader"><tr>     <th style="width:16%">Image</th> <th style="width:12%">Lot Info</th> <th style="width:12%">Location</th> <th style="width:20%">Description</th>  <th style="width:20%">Sale Info</th> <th style="width:20%">Action</th> </tr> </thead><tbody>'
         // Update HTML with items data
-        $.each(responseData['items'],function(e, v){   
-          d += '<tr class="table-item"> <td>' + '<a id ="' + v['ID'] + '" href="/bid_item' + v['ID'] + '">' + '<img class="img-fluid" style="width:200px; height:80px;" src="' + v['picture'] + '">' + '</a></td>'
-          d += ' <td>' + '<a id ="' + v['ID'] + '" href="/bid_item' + v['ID'] + '"><p>' + v['Item_name'] + '</p></a></td>'
-          d += ' <td>' + '<a id ="' + v['ID'] + '" href="/bid_item' + v['ID'] + '"><p>' + v['Start_time'] + '</p></a></td>'
-          d += ' <td>' + '<a id ="' + v['ID'] + '" href="/bid_item' + v['ID'] + '"><p>' + v['End_time'] + '</p></a></td>'
+        $.each(responseData['items'], function (e, v) {
+          d += '<tr class="table-item"> <td>' + '<p class = "itemInfo" id ="' + v['ID'] + '">' + '<img class="img-fluid" src="' + v['picture'] + '">' + '</p></td>'
+          d += ' <td>' + '<a class = "itemName" id ="' + v['ID'] + '" href="/bid_item' + v['ID'] + '">' + v['Item_name'] + '</a></td>'
+          d += ' <td>' + '<p class = "itemLocation" id ="' + v['ID'] + '"><p>' + v['location'] + '</p></p></td>'
+          d += ' <td>' + '<p class = "itemDescription" id ="' + v['ID'] + '"><p>' + v['description'] + '</p></p></td>'
+          d += ' <td>' + '<p class = "itemSaleInfo" id ="' + v['ID'] + '"><p>' + v['End_time'] + '</p></p></td>'
+          d += ' <td>' + '<a class = "itemBidder" id ="' + v['ID'] + '" href="/bid_item' + v['ID'] + '">' + '<div class="bid-button">Bid now</div></a></td>'
           d += '</tr>'
 
         });
@@ -58,6 +107,7 @@
         document.getElementById('itemsList').innerHTML += d;
       })
       .catch(error => console.error('Error fetching items:', error));
+
   </script>
 
 </body>
