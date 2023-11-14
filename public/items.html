@@ -33,10 +33,9 @@
     });
 
 
-    const pathArray = window.location.pathname.split('/');
+    const pathArray = window.location.pathname.split('n');
     console.log(pathArray);
-    const pathName = pathArray[pathArray.length - 1];
-    session_ID= pathName[pathName.length -1];
+    const session_ID = pathArray[pathArray.length - 1];
     // Fetch items data from the server
     fetch(`/auth/item_by_session/${session_ID}`, {
       method: 'GET',

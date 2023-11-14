@@ -26,6 +26,36 @@ const getAllSessionsAsync = () => {
 exports.getAllSessions = async (req, res) => {
     try {
         const results = await getAllSessionsAsync();
+        console.log(results[0]);
+        results.forEach(session => {
+            // Input date string
+            var inputDateString = session.Session_date;
+            // Create a Date object from the input string
+            var date = new Date(inputDateString);
+
+            // Get day, month, and year components
+            var day = date.getUTCDate();
+            var month = date.getUTCMonth() + 1; // Months are zero-based, so we add 1
+            var year = date.getUTCFullYear();
+
+            // Ensure two-digit formatting
+            day = day < 10 ? "0" + day : day;
+            month = month < 10 ? "0" + month : month;
+
+            // Create the formatted date string
+            var formattedDateString = month + "/" + day + "/" + year;
+
+            session.Session_date = formattedDateString;
+            var currentDate = new Date().toLocaleString('en-US', { timeZone: 'Asia/Bangkok' });
+            currentDate = currentDate.split(',')[0];
+            if (formattedDateString > currentDate) {
+                session.Status = "Coming soon";
+            } else if (formattedDateString < currentDate) {
+                session.Status = "Past";
+            } else {
+                session.Status = "Active";
+            }
+        });
         // Send the response to the client (res.send or res.json, depending on your framework)
         res.status(200).json({ sessions: results });
     } catch (err) {
