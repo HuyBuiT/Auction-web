@@ -7,8 +7,8 @@ const db = mysql.createConnection({
 });
 const addNewItemAsync = (itemData) => {
     return new Promise((resolve, reject) => {
-        db.query('INSERT INTO item (Item_name, location, description, picture, startPrice, currentPrice, soldPrice, Category_ID, session_ID, seller_ID, Admin_ID, Start_time, End_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [itemData.Item_name, itemData.location, itemData.description, itemData.picture, itemData.startPrice, itemData.currentPrice, itemData.soldPrice, itemData.Category_ID, itemData.session_ID, itemData.seller_ID, itemData.Admin_ID, itemData.Start_time, itemData.End_time],
+        db.query('INSERT INTO item (Item_name, location, description, picture, startPrice, currentPrice, soldPrice, Category_ID, session_ID, seller_ID, Admin_ID, Start_time, End_time, Area, Length, Width) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [itemData.Item_name, itemData.location, itemData.description, itemData.picture, itemData.startPrice, itemData.currentPrice, itemData.soldPrice, itemData.Category_ID, itemData.session_ID, itemData.seller_ID, itemData.Admin_ID, itemData.Start_time, itemData.End_time, itemData.Area, itemData.Length, itemData.Width],
             (err, results) => {
                 if (err) {
                     console.log(err);
@@ -84,10 +84,14 @@ exports.updateItemById = async (req, res) => {
         }
         else{
         const { ID, ...updatedData } = req.body;
-        console.log("updated Data",updatedData);
-        await updateItemByIdAsync(ID, updatedData);
-        // Send a success response to the client
-        res.status(200).json({ message: `Item with ID ${ID} has been updated.` });
+        const item = await getItemsByIDAsync(ID);
+        if (updatedData.currentPrice <= item[0].startPrice || updatedData.currentPrice <= item[0].currentPrice ){
+            res.status(400).json({ message: `Current price can not less than Start Price` });
+        } else{
+            await updateItemByIdAsync(ID, updatedData);
+            // Send a success response to the client
+            res.status(200).json({ message: `Item with ID ${ID} has been updated.` });
+        }
         }
     } catch (err) {
         console.log(err);

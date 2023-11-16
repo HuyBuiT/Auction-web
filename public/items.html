@@ -95,7 +95,7 @@
         // Update HTML with items data
         $.each(responseData['items'], function (e, v) {
           d += '<tr class="table-item"> <td>' + '<p class = "itemInfo" id ="' + v['ID'] + '">' + '<img class="img-fluid" src="' + v['picture'] + '">' + '</p></td>'
-          d += ' <td>' + '<a class = "itemName" id ="' + v['ID'] + '" href="/bid_item' + v['ID'] + '">' + v['Item_name'] + '</a></td>'
+          d += ' <td>' + '<a class = "itemName" id ="' + v['ID'] + '" href="/view_item' + v['ID'] + '">' + v['Item_name'] + '</a></td>'
           d += ' <td>' + '<p class = "itemLocation" id ="' + v['ID'] + '"><p>' + v['location'] + '</p></p></td>'
           d += ' <td>' + '<p class = "itemDescription" id ="' + v['ID'] + '"><p>' + v['description'] + '</p></p></td>'
           d += ' <td>' + '<p class = "itemSaleInfo" id ="' + v['ID'] + '"><p>' + v['End_time'] + '</p></p></td>'

@@ -135,8 +135,8 @@ exports.deleteSessionByName = async (req, res) => {
 // Create a Promise-based function to add a new session
 const addNewSessionAsync = (sessionData) => {
     return new Promise((resolve, reject) => {
-        db.query('INSERT INTO sessions (ID, Session_date, Start_time, End_time, admin_ID, Name) VALUES (?, ?, ?, ?, ?, ?)',
-            [sessionData.ID, sessionData.Session_date, sessionData.Start_time, sessionData.End_time,sessionData.admin_ID, sessionData.Name],
+        db.query('INSERT INTO sessions (ID, Session_date, admin_ID, Name) VALUES (?, ?, ?, ?)',
+            [sessionData.ID, sessionData.Session_date, sessionData.admin_ID, sessionData.Name],
             (err, results) => {
                 if (err) {
                     console.log(err);
@@ -174,17 +174,35 @@ exports.addNewSession = async (req, res) => {
 // Create a Promise-based function to update a session by ID
 const updateSessionByIdAsync = (sessionId, newData) => {
     return new Promise((resolve, reject) => {
-        db.query('UPDATE sessions SET Session_date = ?, Start_time = ?, End_time = ?, reserved = ?, Winner_ID = ?, admin_ID = ? WHERE ID = ?',
-            [newData.Session_date, newData.Start_time, newData.End_time, newData.reserved, newData.Winner_ID, newData.admin_ID, sessionId],
-            (err, results) => {
-                if (err) {
-                    console.log(err);
-                    reject(err);
-                } else {
-                    console.log(`Session with ID ${sessionId} has been updated.`);
-                    resolve(results);
-                }
-            });
+        const updateQueryParts = [];
+        const updateValues = [];
+
+        for (const key in newData) {
+            if (newData[key] !== null) {
+                updateQueryParts.push(`${key} = ?`);
+                updateValues.push(newData[key]);
+            }
+        }
+
+        if (updateQueryParts.length === 0) {
+            // If no attributes to update, resolve immediately.
+            resolve('No updates required.');
+            return;
+        }
+
+        updateValues.push(sessionId);
+
+        const updateQuery = `UPDATE sessions SET ${updateQueryParts.join(', ')} WHERE ID = ?`;
+
+        db.query(updateQuery, updateValues, (err, results) => {
+            if (err) {
+                console.log(err);
+                reject(err);
+            } else {
+                console.log(`Session with ID ${sessionId} has been updated.`);
+                resolve(results);
+            }
+        });
     });
 };
 
