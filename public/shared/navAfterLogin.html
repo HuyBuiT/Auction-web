@@ -15,9 +15,8 @@
         a.nav-link:hover {
             color: #05EDBC;
         }
-        .dropdown {
-            margin-right: auto;
-        }
+        
+
     </style>
 
 </head>
@@ -39,7 +38,7 @@
                     </li>
                     
                 </ul>
-                <span class="nav-item dropdown">
+                <span class="nav-item dropdown" id="ha" style="margin-left:auto">
                     <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false" id="userAvatar">
                         
@@ -59,7 +58,11 @@
             </div>
         </div>
     </nav>
-
+    <style>
+        .navbar > span#ha.dropdown {
+            margin-left: auto;
+        }
+    </style>
     <script>
         fetch('/auth/data', {
             method: 'GET',
