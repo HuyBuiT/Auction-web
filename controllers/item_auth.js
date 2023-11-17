@@ -86,7 +86,7 @@ exports.updateItemById = async (req, res) => {
         const { ID, ...updatedData } = req.body;
         const item = await getItemsByIDAsync(ID);
         if (updatedData.currentPrice <= item[0].startPrice || updatedData.currentPrice <= item[0].currentPrice ){
-            res.status(400).json({ message: `Current price can not less than Start Price` });
+            res.status(400).json({ message: `Current price can not less than start price or existed current price` });
         } else{
             await updateItemByIdAsync(ID, updatedData);
             // Send a success response to the client

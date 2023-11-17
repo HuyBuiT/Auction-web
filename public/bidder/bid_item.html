@@ -56,7 +56,7 @@
 
     <script>
         $(function () {
-            $("#nav-placeholder").load("navAfterLogin.html");
+            $("#nav-placeholder").load("../shared/navAfterLogin.html");
         });
     </script>
     <h1>Bidding item</h1>
@@ -66,7 +66,7 @@
     <form id="bidItemForm">
         <label for="Price">Your Price:</label>
         <input type="number" id="currentPrice" name="currentPrice" required>
-
+        <p id="error" style="color: red;"></p>
         
         <button type="submit">Summit</button>
     </form>
@@ -144,15 +144,17 @@
                     const result = await response.json();
                     console.log(result);
                     const item_detail =getItemDetail(item_ID);
+                    document.getElementById("error").innerHTML = "";
                     alert('Bid successfully!');
                 } else {
                     const errorData = await response.json();
                     console.error('Error bidding item:', errorData);
-                    alert('Failed to bid item.');
+                    document.getElementById("error").innerHTML = errorData.message;
+                    //alert('Failed to bid item.', errorData.message);
                 }
             } catch (error) {
                 console.error('Error bidding item:', error);
-                alert('Failed to bid item.');
+                alert('Failed to bid item.', error);
             }
         });
     </script>

@@ -18,8 +18,12 @@ router.get('/profile', authController.isLoggedIn, (req, res) => {
     }
 })
 router.get('/home', authController.isLoggedIn, (req, res) => {
-    if (req.user) {
-        res.sendFile("home.html", { root: './public/shared' })
+    if (req.user && req.user.isAdmin == 1) {
+        res.sendFile("home.html", { root: './public/admin' });
+    } else if (req.user && req.user.isSeller == 1){
+        res.sendFile("home.html", { root: './public/seller' });
+    } else if (req.user){
+        res.sendFile("home.html", { root: './public/bidder' });
     } else {
         res.sendFile("login.html", { root: './public/shared' });
     }
