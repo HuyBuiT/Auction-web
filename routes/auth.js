@@ -7,7 +7,6 @@ const router = express.Router();
 //user
 router.post('/register', userController.register)
 router.post('/login', userController.login);
-router.get('/confirmLogout', userController.confirmLogout);
 router.get('/logout', userController.logout);
 router.get('/data', userController.isLoggedIn, (req, res) => {
     res.json(req.user);

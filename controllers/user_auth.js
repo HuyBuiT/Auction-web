@@ -93,9 +93,6 @@ exports.isLoggedIn = async (req, res, next) => {
         next();
     }
 }
-exports.confirmLogout =(req,res) =>{
-    res.sendFile("confirm_logout.html", { root: './public/' });
-}
 exports.logout = (req, res) => {
     res.cookie('userSave', 'logout', {
         expires: new Date(Date.now() + 2 * 1000),
