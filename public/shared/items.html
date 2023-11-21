@@ -83,10 +83,11 @@
     const pathArray = window.location.pathname.split('n');
     console.log(pathArray);
     const session_ID = pathArray[pathArray.length - 1];
-    // Fetch items data from the server
-    fetch(`/auth/item_by_session/${session_ID}`, {
-      method: 'GET',
-    })
+    const interval = setInterval (() =>{
+      // Fetch items data from the server
+      fetch(`/auth/item_by_session/${session_ID}`, {
+        method: 'GET',
+      })
       .then(response => response.json())
       .then(responseData => {
         let d = ''
@@ -98,16 +99,17 @@
           d += ' <td>' + '<a class = "itemName" id ="' + v['ID'] + '" href="/view_item' + v['ID'] + '">' + v['Item_name'] + '</a></td>'
           d += ' <td>' + '<p class = "itemLocation" id ="' + v['ID'] + '"><p>' + v['location'] + '</p></p></td>'
           d += ' <td>' + '<p class = "itemDescription" id ="' + v['ID'] + '"><p>' + v['description'] + '</p></p></td>'
-          d += ' <td>' + '<p class = "itemSaleInfo" id ="' + v['ID'] + '"><p>' + v['End_time'] + '</p></p></td>'
+          d += ' <td>' + '<p class = "itemSaleInfo" id ="' + v['ID'] + '"><p>' + v['timeLeft'] + '</p></p></td>'
           d += ' <td>' + '<a class = "itemBidder" id ="' + v['ID'] + '" href="/bid_item' + v['ID'] + '">' + '<div class="bid-button">Bid now</div></a></td>'
           d += '</tr>'
 
         });
         d += '</tbody></table>'
-        document.getElementById('itemsList').innerHTML += d;
+        document.getElementById('itemsList').innerHTML = d;
       })
       .catch(error => console.error('Error fetching items:', error));
 
+    }, 1000);
   </script>
 
 </body>

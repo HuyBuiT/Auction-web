@@ -147,12 +147,36 @@ const getItemsByIDAsync = (ID) => {
     });
 };
 
+function calculateTimeLeft(endTime) {
+    // Parse endTime to create a Date object
+    const endTimeParts = endTime.split(":");
+    const endDateTime = new Date();
+    endDateTime.setHours(parseInt(endTimeParts[0], 10));
+    endDateTime.setMinutes(parseInt(endTimeParts[1], 10));
+    endDateTime.setSeconds(parseInt(endTimeParts[2], 10));
+  
+    // Get the current time
+    const now = new Date();
+  
+    // Calculate the difference between endTime and current time
+    const timeDifference = endDateTime.getTime() - now.getTime();
+  
+    // Convert the time difference to hours, minutes, seconds
+    const hoursLeft = Math.floor(timeDifference / (1000 * 60 * 60));
+    const minutesLeft = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+    const secondsLeft = Math.floor((timeDifference % (1000 * 60)) / 1000);
+  
+    // Format the time left as "hh:mm:ss"
+    const formattedTimeLeft = `${String(hoursLeft).padStart(2, '0')}:${String(minutesLeft).padStart(2, '0')}:${String(secondsLeft).padStart(2, '0')}`;
+  
+    return formattedTimeLeft;
+  }
+  
 // Use async/await to call the getItemsByName function
 exports.getItemsByID = async (req, res) => {
     try {
         const ID = req.params.item_ID; // You should extract the item name from the request as needed
         const results = await getItemsByIDAsync(ID);
-
         // Send the response to the client (res.send or res.json, depending on your framework)
         res.status(200).json({ items: results });
     } catch (err) {
@@ -216,9 +240,17 @@ const getAllItemsBySessionAsync =(session_ID) => {
 exports.getAllItemsBySession = async(req,res) => {
     try {
         const session_ID = req.params.session_ID; // You should extract the item name from the request as needed
-
         const results = await getAllItemsBySessionAsync(session_ID);
 
+        
+        results.forEach(item => {
+            const timeLeft = calculateTimeLeft(item.End_time);
+            if (timeLeft <=0){
+                item.timeLeft = "Past";
+            } else{
+                item.timeLeft = timeLeft;
+            }
+        });
         // Send the response to the client (res.send or res.json, depending on your framework)
         res.status(200).json({ items: results });
     } catch (err) {
