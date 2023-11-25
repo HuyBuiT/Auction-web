@@ -51,7 +51,7 @@
 
         @media only screen and (min-width: 576px) {
             .modall {
-                display: none;
+                display: none ;
                 position: fixed;
                 z-index: 1;
                 overflow: auto;
@@ -134,6 +134,9 @@
                     <li class="nav-item  active">
                         <a class="nav-link" aria-current="page" href="/home">Home</a>
                     </li>
+                    <li class="nav-item  active">
+                        <a class="nav-link" aria-current="page" href="/home">Registe to be Seller</a>
+                    </li>
 
                 </ul>
                 <span class="nav-item dropdown" id="ha" style="margin-left:auto">
@@ -186,15 +189,15 @@
         }
     </style>
     <script>
-        // fetch('/auth/data', {
-        //     method: 'GET',
-        // })
-        //     .then(response => response.json()) // Parse the response as JSON
-        //     .then(data => {
-        //         let d = '';
-        //         d += '<img class="img-fluid" width="40px" height="40px"src = "../assets/image/avatar/userAvatar.jpg" style="border-radius: 50%;">'
-        //         $('#userAvatar').append(d);
-        //     })
+        fetch('/auth/data', {
+            method: 'GET',
+        })
+            .then(response => response.json()) // Parse the response as JSON
+            .then(data => {
+                let d = '';
+                d += '<img class="img-fluid" width="40px" height="40px"src = "../assets/image/avatar/userAvatar.jpg" style="border-radius: 50%;">'
+                $('#userAvatar').append(d);
+            })
 
         var modal = document.getElementById("myModal");
 
