@@ -36,8 +36,8 @@
                         Profile Page
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">
-                            Hey John welcome back
+                        <h5 class="card-title" id = "title">
+                            
                         </h5>
                         <p class="card-text">
                             This is your profile where you can add all information about yourself
@@ -62,6 +62,8 @@
         d += '<h5 id="name2">'+ 'Name: '+data.Name+'</h5>';
         d += '<a href="#" id="email">'+ data.Email+'</a>';
         $('#card-body').html(d);
+        title= document.getElementById("title");
+        title.innerHTML = "Hey "+ data.Name +" welcome back";
     })
         .catch(error => console.error('Error:', error));
       </script>

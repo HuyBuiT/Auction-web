@@ -259,3 +259,42 @@ exports.getAllItemsBySession = async(req,res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+const getAllItemsBySellerIDAsync = (seller_ID) => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM item WHERE seller_ID = ?', [seller_ID], (err, results) => {
+            if (err) {
+                console.log(err);
+                reject(err);
+            } else {
+                if (results.length === 0) {
+                    console.log("No items found for the given seller_ID.");
+                }
+                resolve(results);
+            }
+        });
+    });
+}
+
+exports.getAllItemsBySeller = async (req, res) => {
+    try {
+        const seller_ID = req.user.ID;
+        const results = await getAllItemsBySellerIDAsync(seller_ID);
+
+        results.forEach(item => {
+            const timeLeft = calculateTimeLeft(item.End_time);
+            if (timeLeft <= 0) {
+                item.timeLeft = "Past";
+            } else {
+                item.timeLeft = timeLeft;
+            }
+        });
+
+        // Send the response to the client (res.send or res.json, depending on your framework)
+        res.status(200).json({ items: results });
+    } catch (err) {
+        console.log(err);
+        // Handle the error and send an appropriate response
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}

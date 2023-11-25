@@ -18,6 +18,7 @@ router.get('/session_by_name',sessionController.getSessionsByName);
 router.post('/delete_session_by_name',userController.isLoggedIn, sessionController.deleteSessionByName);
 router.post('/add_session',userController.isLoggedIn, sessionController.addNewSession);
 router.post('/update_session',userController.isLoggedIn, sessionController.updateSessionById);
+router.get("/session_by_admin", userController.isLoggedIn, sessionController.getSessionsByAdminID);
 
 //item
 router.post('/add_item',userController.isLoggedIn, itemController.addNewItem);
@@ -26,4 +27,5 @@ router.get('/all_items',itemController.getAllItems);
 router.get('/item_by_ID/:item_ID', itemController.getItemsByID);
 router.get('/item_by_session/:session_ID', itemController.getAllItemsBySession);
 router.post('/delete_item',userController.isLoggedIn, itemController.deleteItemById);
+router.get('/item_by_seller',userController.isLoggedIn, itemController.getAllItemsBySeller);
 module.exports = router;

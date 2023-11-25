@@ -13,12 +13,12 @@ exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
-            return res.status(400).sendFile("login.html", { root: './public/' }); //Email or password isn't fill in
+            return res.status(400).sendFile("login.html", { root: './public/shared' }); //Email or password isn't fill in
         }
         db.query('SELECT * FROM systemuser WHERE Email = ?', [email], async (err, results) => {
             console.log("login ", results);
             if (!results || !results[0] || !await bcrypt.compare(password, results[0].Pass)) {
-                res.status(401).sendFile("login.html", { root: './public/' }); //Incorrect email or password
+                res.status(401).sendFile("login.html", { root: './public/shared' }); //Incorrect email or password
             } else {
                 const ID = results[0].ID;
 
@@ -74,10 +74,8 @@ exports.isLoggedIn = async (req, res, next) => {
             const decoded = await promisify(jwt.verify)(req.cookies.userSave,
                 process.env.JWT_SECRET
             );
-            console.log("decoded" ,decoded);
             // 2. Check if the user still exist
             db.query('SELECT * FROM systemuser WHERE ID = ?', [decoded.ID], (err, results) => {
-                console.log("IsloggedIN " ,results);
                 if (results.length === 0) {
                     console.log("error with ID");
                     return next();

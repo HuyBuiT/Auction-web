@@ -26,7 +26,6 @@ const getAllSessionsAsync = () => {
 exports.getAllSessions = async (req, res) => {
     try {
         const results = await getAllSessionsAsync();
-        console.log(results[0]);
         results.forEach(session => {
             // Input date string
             var inputDateString = session.Session_date;
@@ -223,6 +222,66 @@ exports.updateSessionById = async (req, res) => {
     } catch (err) {
         console.log(err);
         // Handle the error and send an appropriate error response
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+// Create a Promise-based function to get sessions by adminID
+const getSessionsByAdminIDAsync = (adminID) => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM sessions WHERE Admin_ID = ?', [adminID], (err, results) => {
+            if (err) {
+                console.log(err);
+                reject(err);
+            } else {
+                if (results.length === 0) {
+                    console.log("No sessions found for the given adminID.");
+                }
+                resolve(results);
+            }
+        });
+    });
+};
+
+// Use async/await to call the getSessionsByAdminID function
+exports.getSessionsByAdminID = async (req, res) => {
+    try {
+        const adminID = req.user.ID; // Extract the admin ID from the request
+        const results = await getSessionsByAdminIDAsync(adminID);
+        results.forEach(session => {
+            // Input date string
+            var inputDateString = session.Session_date;
+            // Create a Date object from the input string
+            var date = new Date(inputDateString);
+
+            // Get day, month, and year components
+            var day = date.getUTCDate();
+            var month = date.getUTCMonth() + 1; // Months are zero-based, so we add 1
+            var year = date.getUTCFullYear();
+
+            // Ensure two-digit formatting
+            day = day < 10 ? "0" + day : day;
+            month = month < 10 ? "0" + month : month;
+
+            // Create the formatted date string
+            var formattedDateString = month + "/" + day + "/" + year;
+
+            session.Session_date = formattedDateString;
+            var currentDate = new Date().toLocaleString('en-US', { timeZone: 'Asia/Bangkok' });
+            currentDate = currentDate.split(',')[0];
+            if (formattedDateString > currentDate) {
+                session.Status = "Coming soon";
+            } else if (formattedDateString < currentDate) {
+                session.Status = "Past";
+            } else {
+                session.Status = "Active";
+            }
+        });
+        // Send the response to the client (res.send or res.json, depending on your framework)
+        res.status(200).json({ sessions: results });
+    } catch (err) {
+        console.log(err);
+        // Handle the error and send an appropriate response
         res.status(500).json({ error: 'Internal server error' });
     }
 };

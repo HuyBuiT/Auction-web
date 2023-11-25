@@ -59,7 +59,9 @@
             $("#nav-placeholder").load("navAfterLogin.html");
         });
     </script>
-    <h1> Add new session</h1>
+    <h1> Manage session</h1>
+    <table></table>
+    <div id="content"></div>
     <form id="addSessionForm">
         <label for="Name">Name:</label>
         <input type="text" id="Name" name="Name" required>
@@ -69,13 +71,6 @@
         <label for="Session_date">Session Date:</label>
         <input type="date" id="Session_date" name="Session_date" required>
 
-        <label for="Start_time">Start Time:</label>
-        <input type="text" id="Start_time" name="Start_time" required pattern="(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d" placeholder="hh:mm:ss">
-
-        <label for="End_time">End Time:</label>
-        <input type="text" id="End_time" name="End_time" required pattern="(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d" placeholder="hh:mm:ss">
-
-
 
         <!-- Add more fields as needed -->
 
@@ -83,6 +78,28 @@
     </form>
 
     <script>
+        fetch('/auth/session_by_admin', {
+            method: 'GET',
+        })
+            .then(response => response.json()) // Parse the response as JSON
+            .then(data => {
+                let d = '<table class="sessionTable">';
+                d += '<thead class = "tableHeader"> <tr> <th class="thID">ID</th> <th  class="thName">Name</th> <th  class="thSessionDate">Session Date(mm/dd/yyyy)</th> <th  class="thStatus">Status</th> </tr> </thead> <tbody>'
+                $.each(data["sessions"], function (e, v) {
+                    d += '<tr>'
+                    d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['ID'] + '</th>'
+                    d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Name'] + '</th>'
+                    d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Session_date'] + '</th>'
+                    d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Status'] + '</th>'
+
+
+                    d += '</tr>'
+
+                })
+                d += '</tbody></table>'
+                $('#content').html(d);
+            })
+            .catch(error => console.error('Error:', error));
         document.getElementById('addSessionForm').addEventListener('submit', async function (event) {
             event.preventDefault();
 
