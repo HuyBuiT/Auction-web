@@ -249,6 +249,7 @@ exports.getSessionsByAdminID = async (req, res) => {
         const adminID = req.user.ID; // Extract the admin ID from the request
         const results = await getSessionsByAdminIDAsync(adminID);
         results.forEach(session => {
+             console.log(session);
             // Input date string
             var inputDateString = session.Session_date;
             // Create a Date object from the input string
@@ -277,6 +278,7 @@ exports.getSessionsByAdminID = async (req, res) => {
                 session.Status = "Active";
             }
         });
+        
         // Send the response to the client (res.send or res.json, depending on your framework)
         res.status(200).json({ sessions: results });
     } catch (err) {

@@ -37,10 +37,10 @@ router.get('/view_item:item_ID',(req,res) =>{
 router.get('/bid_item:item_ID', (req,res) => {
     res.sendFile("bid_item.html", {root: './public/bidder'});
 })
-router.get('/manage_session',(req,res) => {
+router.get('/manage_session',authController.isLoggedIn,(req,res) => {
     res.sendFile("manage_session.html",{root: './public/admin'});
 })
-router.get('/manage_item',(req,res) => {
+router.get('/manage_item',authController.isLoggedIn,(req,res) => {
     res.sendFile("manage_item.html",{root: './public/seller'});
 })
 module.exports = router;

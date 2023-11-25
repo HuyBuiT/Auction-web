@@ -78,11 +78,16 @@
     </form>
 
     <script>
-        fetch('/auth/session_by_admin', {
+        var adminID = 0;
+        function fetchDataAndProcess() {
+            fetch('/auth/session_by_admin', {
             method: 'GET',
-        })
+            })
             .then(response => response.json()) // Parse the response as JSON
             .then(data => {
+                adminID = data["sessions"][0].admin_ID;
+                console.log(data["sessions"][0].admin_ID); //42
+                console.log(adminID); //42
                 let d = '<table class="sessionTable">';
                 d += '<thead class = "tableHeader"> <tr> <th class="thID">ID</th> <th  class="thName">Name</th> <th  class="thSessionDate">Session Date(mm/dd/yyyy)</th> <th  class="thStatus">Status</th> </tr> </thead> <tbody>'
                 $.each(data["sessions"], function (e, v) {
@@ -92,7 +97,6 @@
                     d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Session_date'] + '</th>'
                     d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Status'] + '</th>'
 
-
                     d += '</tr>'
 
                 })
@@ -100,16 +104,19 @@
                 $('#content').html(d);
             })
             .catch(error => console.error('Error:', error));
+        }
+        const data = fetchDataAndProcess();
+        console.log(adminID); //0
         document.getElementById('addSessionForm').addEventListener('submit', async function (event) {
             event.preventDefault();
 
             const formData = new FormData(this);
             const sessionData = {};
-
+            
             formData.forEach((value, key) => {
                 sessionData[key] = value;
             });
-
+            sessionData['admin_ID'] = adminID;
             try {
                 const response = await fetch('/auth/add_session', {
                     method: 'POST',

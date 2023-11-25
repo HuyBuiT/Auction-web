@@ -134,7 +134,6 @@
                     <li class="nav-item  active">
                         <a class="nav-link" aria-current="page" href="/home">Home</a>
                     </li>
-
                 </ul>
                 <span class="nav-item dropdown" id="ha" style="margin-left:auto">
                     <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false"
@@ -186,15 +185,45 @@
         }
     </style>
     <script>
-        // fetch('/auth/data', {
-        //     method: 'GET',
-        // })
-        //     .then(response => response.json()) // Parse the response as JSON
-        //     .then(data => {
-        //         let d = '';
-        //         d += '<img class="img-fluid" width="40px" height="40px"src = "../assets/image/avatar/userAvatar.jpg" style="border-radius: 50%;">'
-        //         $('#userAvatar').append(d);
-        //     })
+        fetch('/auth/data', {
+            method: 'GET',
+        })
+            .then(response => response.json()) // Parse the response as JSON
+            .then(data => {
+                const nav = document.querySelector(".navbar-nav");
+                console.log(data);
+                if (data.isSeller == 1) {
+                    const li = document.createElement("li");
+                    li.classList.add('nav-item');
+                    li.classList.add('active');
+                    li.innerHTML = "<a class='nav-link' aria-current='page' href='/manage_item'>Manage item</a>";
+                    nav.appendChild(li);
+                } else if (data.isAdmin == 1) {
+                    const li = document.createElement("li");
+                    li.classList.add('nav-item');
+                    li.classList.add('active');
+                    li.innerHTML = "<a class='nav-link' aria-current='page' href='/manage_session'>Manage session</a>";
+                    nav.appendChild(li);
+
+                    const li1 = document.createElement("li");
+                    li1.classList.add('nav-item');
+                    li1.classList.add('active');
+                    li1.innerHTML = "<a class='nav-link' aria-current='page' href='/manage_session'>Manage category</a>";
+                    nav.appendChild(li1);
+
+                    const li2 = document.createElement("li");
+                    li2.classList.add('nav-item');
+                    li2.classList.add('active');
+                    li2.innerHTML = "<a class='nav-link' aria-current='page' href='/manage_session'>Specify aution time</a>";
+                    nav.appendChild(li2);
+                } else {
+                    const li = document.createElement("li");
+                    li.classList.add('nav-item');
+                    li.classList.add('active');
+                    li.innerHTML = "<a class='nav-link' aria-current='page' href='/home'>Register to seller</a>";
+                    nav.appendChild(li);
+                }
+            })
 
         var modal = document.getElementById("myModal");
 
