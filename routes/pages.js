@@ -43,6 +43,9 @@ router.get('/manage_session',authController.isLoggedIn,(req,res) => {
 router.get('/manage_category',authController.isLoggedIn,(req,res) => {
     res.sendFile("manage_category.html",{root: './public/admin'});
 })
+router.get('/manage_item_admin',authController.isLoggedIn,(req,res) => {
+    res.sendFile("manage_item.html",{root: './public/admin'});
+})
 router.get('/manage_item',authController.isLoggedIn,(req,res) => {
     res.sendFile("manage_item.html",{root: './public/seller'});
 })
