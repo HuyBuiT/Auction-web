@@ -90,19 +90,20 @@
         method: 'GET',
     })
         .then(response => response.json())
-        .then(responseData => {
-            // Ensure that items is an array
-            const items = Array.isArray(responseData.items) ? responseData.items : [];
+        .then(data => {
 
-            // Check if there's at least one item
-            if (items.length > 0) {
-                const item = items[0];
-
+            if (data) {
+                const item = data.items;
                 // Update HTML with item data
                 const itemContainer = document.getElementById('itemContainer');
 
                 const html = `
-                    <div class="item-image"><img src="${item.picture}" alt="Item Image"> </div>
+                    <div class="item-image">
+                        <img src="${item.img[0]}" alt="Item Image"> 
+                        <img src="${item.img[1]}" alt="Item Image" style ="width: 80px; height: 50px; display: inline" > 
+                        <img src="${item.img[2]}" alt="Item Image" style ="width: 80px; height: 50px; display: inline" > 
+                    </div>
+                    
                     <div class="item-details">
                         <div class="itemID"><label>ID: </label> <span> ${item.ID}</span>
                         <div class="itemName"><label>Item Name: </label><span> ${item.Item_name}</span></div>

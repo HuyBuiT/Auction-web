@@ -113,18 +113,19 @@
         })
             .then(response => response.json())
             .then(responseData => {
-                // Ensure that items is an array
-                const items = Array.isArray(responseData.items) ? responseData.items : [];
 
                 // Check if there's at least one item
-                if (items.length > 0) {
-                    const item = items[0];
+                if (responseData) {
+                    const item = responseData.items;
 
                     // Update HTML with item data
                     const itemImage = document.querySelector('.item-image');
                     const itemDetails = document.querySelector('.item-details');
                     const html = `
-                    <img class="img-fluid"src="${item.picture}" alt="Item Image">`
+                    <img class="img-fluid"src="${item.img[0]}" alt="Item Image">
+                    <img class="img-fluid"src="${item.img[1]}" alt="Item Image" style ="width: 80px; height: 50px; display: inline">
+                    <img class="img-fluid"src="${item.img[2]}" alt="Item Image" style ="width: 80px; height: 50px; display: inline">`
+                    
 
                     const html2 = `
                         <div class="itemID"><label>ID: </label> <span> ${item.ID}</span></div>

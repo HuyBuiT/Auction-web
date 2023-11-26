@@ -131,6 +131,38 @@ exports.getAllItems = async (req, res) => {
 };
 
 // Create a Promise-based function to get items by name
+// const getItemsByIDAsync = (ID) => {
+//     return new Promise((resolve, reject) => {
+//         db.query('SELECT * FROM item WHERE ID = ?', [ID], (err, results) => {
+//             if (err) {
+//                 console.log(err);
+//                 reject(err);
+//             } else {
+//                 if (results.length === 0) {
+//                     console.log("No items found for the given ID.");
+//                 }
+//                 results['img'] = [];
+//                 db.query('SELECT picture FROM item_picture WHERE item_ID = ?', [ID], (err, pictures) => {
+//                     if (err) {
+//                         console.log(err);
+//                         reject(err);
+//                     } else {
+//                         let i = 0;
+//                         pictures.forEach(item =>{
+//                             results['img'][i] = item.picture;
+//                             i++;
+//                         })
+//                         console.log (results);
+//                         resolve(results);
+                        
+//                     }
+//                 });
+                
+//             }
+//         });
+//     });
+// };
+
 const getItemsByIDAsync = (ID) => {
     return new Promise((resolve, reject) => {
         db.query('SELECT * FROM item WHERE ID = ?', [ID], (err, results) => {
@@ -140,8 +172,21 @@ const getItemsByIDAsync = (ID) => {
             } else {
                 if (results.length === 0) {
                     console.log("No items found for the given ID.");
+                    resolve(null); // Resolve with null for no results
+                } else {
+                    let itemData = { ...results[0], img: [] }; // Create a new object combining item details and an empty img array
+                    db.query('SELECT picture FROM item_picture WHERE item_ID = ?', [ID], (err, pictures) => {
+                        if (err) {
+                            console.log(err);
+                            reject(err);
+                        } else {
+                            pictures.forEach(item => {
+                                itemData.img.push(item.picture);
+                            });
+                            resolve(itemData); // Resolve with the combined object containing item details and images
+                        }
+                    });
                 }
-                resolve(results);
             }
         });
     });
@@ -245,8 +290,12 @@ exports.getAllItemsBySession = async(req,res) => {
         
         results.forEach(item => {
             const timeLeft = calculateTimeLeft(item.End_time);
-            if (timeLeft <=0){
-                item.timeLeft = "Past";
+            const timeParts = timeLeft.split(':');
+
+            const hoursLeft = parseInt(timeParts[0], 10);
+            const minutesLeft = parseInt(timeParts[1], 10);
+            if (hoursLeft <0 || minutesLeft <0){
+                item.timeLeft = "Done";
             } else{
                 item.timeLeft = timeLeft;
             }
