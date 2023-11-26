@@ -33,7 +33,7 @@ exports.login = async (req, res) => {
                     httpOnly: true
                 }
                 res.cookie('userSave', token, cookieOptions);
-                res.status(200).redirect("/profile");
+                res.status(200).redirect("/home");
             }
         })
     } catch (err) {
@@ -48,9 +48,9 @@ exports.register = (req, res) => {
             console.log(err);
         } else {
             if (results.length > 0) {
-                return res.sendFile("login.html", { root: './public/' }); //The email is already in use
+                return res.sendFile("login.html", { root: './public/shared' }); //The email is already in use
             } else if (password != passwordConfirm) {
-                return res.sendFile("register.html", { root: './public/' }); //password dont match
+                return res.sendFile("register.html", { root: './public/shared' }); //password dont match
             }
         }
 

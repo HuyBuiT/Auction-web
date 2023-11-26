@@ -41,21 +41,25 @@
             border-radius: 5px;
             margin-bottom: 15px;
         }
-
-        .item-details {
-            margin-top: 15px;
+        #itemContainer {
+            display: flex;
         }
-
+        .item-image,.item-details {
+            margin-top: 15px;
+            width: 50%;
+        }
+        .item-details {
+            margin-left: 15px;
+        }
         .item-details label {
             font-weight: bold;
-            display: block;
             margin-bottom: 5px;
         }
 
         .item-details span {
-            display: block;
             margin-bottom: 10px;
         }
+
     </style>
 </head>
 <body>
@@ -98,22 +102,15 @@
                 const itemContainer = document.getElementById('itemContainer');
 
                 const html = `
-                    <img src="${item.picture}" alt="Item Image">
+                    <div class="item-image"><img src="${item.picture}" alt="Item Image"> </div>
                     <div class="item-details">
-                        <label>ID:</label>
-                        <span>${item.ID}</span>
-                        <label>Item Name:</label>
-                        <span>${item.Item_name}</span>
-                        <label>Location:</label>
-                        <span>${item.location}</span>
-                        <label>Description:</label>
-                        <span>${item.description}</span>
-                        <label>Start Price:</label>
-                        <span>${item.startPrice}</span>
-                        <label>Current Price:</label>
-                        <span>${item.currentPrice}</span>
-                        <label>Sold Price:</label>
-                        <span>${item.soldPrice}</span>
+                        <div class="itemID"><label>ID: </label> <span> ${item.ID}</span>
+                        <div class="itemName"><label>Item Name: </label><span> ${item.Item_name}</span></div>
+                        <div class="itemLocation"><label>Location: </label><span> ${item.location}</span></div>
+                        <div class="itemDescription"><label style = "display:block">Description: </label><span> ${item.description}</span></div>
+                        <div class="itemStartPrice"><label>Start Price: </label><span> ${item.startPrice}</span></div>
+                        <div class="itemCurrentPrice"><label>Current Price: </label><span> ${item.currentPrice}</span></div>
+                        <div class="itemSoldPrice"><label>Sold Price: </label><span> ${item.soldPrice}</span></div>
                         <!-- Add more details as needed -->
                     </div>
                 `;

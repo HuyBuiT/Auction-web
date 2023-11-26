@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,8 +48,29 @@
             border-radius: 3px;
             cursor: pointer;
         }
+
+        #itemContainer {
+            display: flex;
+            width: 80%;
+            margin: 15px auto;
+        }
+
+        .item-image,
+        .item-bidding {
+            margin-top: 15px;
+            width: 50%;
+        }
+
+        .item-bidding {
+            margin-left: 15px;
+        }
+
+        label {
+            font-weight: 700;
+        }
     </style>
 </head>
+
 <body>
     <div id="nav-placeholder">
 
@@ -61,63 +83,100 @@
     </script>
     <h1>Bidding item</h1>
     <div class="item" id="itemContainer">
+        <div class="item-image"></div>
         <!-- Item details will be inserted here -->
+        <div class="item-bidding">
+            <div class="item-details"></div>
+            <div class="item-form">
+                <form id="bidItemForm">
+                    <label for="Price">Your Price:</label>
+                    <input type="number" id="currentPrice" name="currentPrice" required>
+                    <p id="error" style="color: red;"></p>
+
+                    <button type="submit">Summit</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <form id="bidItemForm">
-        <label for="Price">Your Price:</label>
-        <input type="number" id="currentPrice" name="currentPrice" required>
-        <p id="error" style="color: red;"></p>
-        
-        <button type="submit">Summit</button>
-    </form>
+
 
     <script>
         // Extract item ID from the URL
         const pathArray = window.location.pathname.split('m');
         const item_ID = pathArray[pathArray.length - 1];
         console.log(item_ID);
-        
-        function getItemDetail (item_ID){
-            // Fetch item data from the server
+
+
+        // Fetch item data from the server
         fetch(`/auth/item_by_ID/${item_ID}`, {
             method: 'GET',
         })
-        .then(response => response.json())
-        .then(responseData => {
-            // Ensure that items is an array
-            const items = Array.isArray(responseData.items) ? responseData.items : [];
+            .then(response => response.json())
+            .then(responseData => {
+                // Ensure that items is an array
+                const items = Array.isArray(responseData.items) ? responseData.items : [];
 
-            // Check if there's at least one item
-            if (items.length > 0) {
-                const item = items[0];
+                // Check if there's at least one item
+                if (items.length > 0) {
+                    const item = items[0];
 
-                // Update HTML with item data
-                const itemContainer = document.getElementById('itemContainer');
+                    // Update HTML with item data
+                    const itemImage = document.querySelector('.item-image');
+                    const itemDetails = document.querySelector('.item-details');
+                    const html = `
+                    <img class="img-fluid"src="${item.picture}" alt="Item Image">`
 
-                const html = `
-                    <img src="${item.picture}" alt="Item Image">
-                    <div class="item-details">
-                        <label>ID:</label>
-                        <span>${item.ID}</span>
-                        <label>Item Name:</label>
-                        <span>${item.Item_name}</span>
-                        <label>Location:</label>
-                        <span>${item.location}</span>
-                        <label>Description:</label>
-                        <span>${item.description}</span>
-                        <label>Start Price:</label>
-                        <span>${item.startPrice}</span>
-                        <label>Current Price:</label>
-                        <span>${item.currentPrice}</span>
+                    const html2 = `
+                        <div class="itemID"><label>ID: </label> <span> ${item.ID}</span></div>
+                        <div class="itemName"><label>Item Name: </label><span> ${item.Item_name}</span></div>
+                        <div class="itemLocation"><label>Location: </label><span> ${item.location}</span></div>
+                        <div class="itemDescription"><label style = "display:block">Description: </label><span> ${item.description}</span></div>
+                        <div class="itemStartPrice"><label>Start Price: </label><span> ${item.startPrice}</span></div>
+                        <div class="itemCurrentPrice"><label>Current Price: </label><span> ${item.currentPrice}</span></div>
+                        <div class="itemSoldPrice"><label>Sold Price: </label><span> ${item.soldPrice}</span></div>
                         <!-- Add more details as needed -->
-                    </div>
+                    
+                    
                 `;
-                itemContainer.innerHTML = html;
-            } else {
-                console.error('No item found with the given ID');
-            }
-        })
-        .catch(error => console.error('Error fetching item details:', error));
+                    itemImage.innerHTML = html;
+                    itemDetails.innerHTML = html2;
+                } else {
+                    console.error('No item found with the given ID');
+                }
+            })
+            .catch(error => console.error('Error fetching item details:', error));
+        function getItemDetail(item_ID) {
+            fetch(`/auth/item_by_ID/${item_ID}`, {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(responseData => {
+                    // Ensure that items is an array
+                    const items = Array.isArray(responseData.items) ? responseData.items : [];
+
+                    // Check if there's at least one item
+                    if (items.length > 0) {
+                        const item = items[0];
+
+                        // Update HTML with item data
+                        const itemCurrentPrice = document.querySelector('.itemCurrentPrice');
+                        const itemCurrentPriceHTML = `
+                        <div class="itemCurrentPrice"><label>Current Price: </label><span> ${item.currentPrice}</span></div>
+                    `
+                        const itemSoldPrice = document.querySelector('.itemSoldPrice');
+                        const itemSoldPriceHTML = `
+                        <div class="itemSoldPrice"><label>Sold Price: </label><span> ${item.soldPrice}</span></div>
+                    `
+
+                            ;
+                        itemCurrentPrice.innerHTML = itemCurrentPriceHTML;
+                        itemSoldPrice.innerHTML = itemSoldPriceHTML
+                    } else {
+                        console.error('No item found with the given ID');
+                    }
+                })
+                .catch(error => console.error('Error fetching item details:', error));
+
         }
 
         const item_detail = setInterval(() => {
@@ -146,7 +205,7 @@
                 if (response.ok) {
                     const result = await response.json();
                     console.log(result);
-                    const item_detail =getItemDetail(item_ID);
+                    const item_detail = getItemDetail(item_ID);
                     document.getElementById("error").innerHTML = "";
                     alert('Bid successfully!');
                 } else {
@@ -162,4 +221,5 @@
         });
     </script>
 </body>
+
 </html>

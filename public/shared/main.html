@@ -77,7 +77,7 @@
             .then(response => response.json()) // Parse the response as JSON
             .then(data => {
                 let d = '<table class="sessionTable">';
-                d += '<thead class = "tableHeader"> <tr> <th class="thID">ID</th> <th  class="thName">Name</th> <th  class="thSessionDate">Session Date(mm/dd/yyyy)</th> <th  class="thStatus">Status</th> </tr> </thead> <tbody>'
+                d += '<thead class = "tableHeader"> <tr> <th class="thID">ID</th> <th  class="thName">Location</th> <th  class="thSessionDate">Session Date(mm/dd/yyyy)</th> <th  class="thStatus">Status</th> </tr> </thead> <tbody>'
                 $.each(data["sessions"], function (e, v) {
                     d += '<tr>'
                     d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['ID'] + '</th>'

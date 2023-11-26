@@ -34,7 +34,8 @@
             
         }
 
-        button {
+        .button {
+            display: inline;
             background-color: #4caf50;
             color: #fff;
             padding: 10px 15px;
@@ -54,7 +55,17 @@
         .sessionTable {
             width: 100%;
         }
-
+        #addBtn {
+            margin-left: 40%;
+        }
+        #deleteBtn {
+            background-color: red;
+            margin-left: 40%;
+        }
+        #saveBtn {
+            background-color: blue;
+            margin-left: 10%;
+        }
         .addSessionBtn {
             display: inline;
             background-color: #4caf50;
@@ -92,7 +103,7 @@
             $("#nav-placeholder").load("../shared/navAfterLogin.html");
         });
     </script>
-    <h1> Manage session</h1>
+    <h1> Manage Categorys</h1>
     <table></table>
     
     </div>
@@ -100,24 +111,11 @@
         <div class="addSessionBtn">Add auction time
         </div>
     </div> -->
-    
+    <div id="addBtn" class="button">Add Category</div>
+
     <div id="content"></div>
-    <div class="modalAddSession">
-        <form id="addSessionForm">
-            <label for="Name">Name:</label>
-            <input type="text" id="Name" name="Name" required>
-            <label for="ID">Session ID:</label>
-            <input type="text" id="ID" name="ID" required>
-
-            <label for="Session_date">Session Date:</label>
-            <input type="date" id="Session_date" name="Session_date" required>
-
-
-            <!-- Add more fields as needed -->
-
-            <button type="submit">Add Session</button>
-        </form>
-    </div>
+    <div id="deleteBtn" class="button">Delete</div>
+    <div id="saveBtn" class="button">Save</div>
     
 
     <script>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +17,7 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
+            width: 100%;
         }
 
         form {
@@ -39,16 +41,105 @@
             border-radius: 3px;
         }
 
-        button {
-            background-color: #4caf50;
+        .button {
+            background-color: green;
             color: #fff;
             padding: 10px 15px;
             border: none;
-            border-radius: 3px;
+            border-radius: 12%;
             cursor: pointer;
+            display: inline;
+            margin: 0 3px;
+        }
+        #addItemBtn {
+            display: block;
+            float: right;
+            margin-right: 8%;
+        }
+        .delete-btn {
+            background-color: red;
+
+        }
+
+        .edit-btn {
+            background-color: #0586EC;
+        }
+
+        p .nav-link.active {
+            color: white;
+        }
+
+        .table,
+        .table th,
+        .table td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        .tableHeader {
+            background: linear-gradient(90deg, #0586EC 0%, #531BB0 100%);
+            color: white;
+        }
+
+        .table {
+            
+            width: 100%;
+            text-align: center;
+
+        }
+
+        .table-item:hover {
+            background: rgb(178, 89, 56);
+            cursor: pointer;
+        }
+
+        tr:nth-child(even) {background-color: #f2f2f2;}
+
+        td {
+            vertical-align: middle
+        }
+
+        .table-item {
+            margin-top: 10px;
+
+        }
+
+        p,
+        a {
+            font-size: 1.2rem;
+        }
+
+        a.itemName {
+            text-decoration: none;
+            color: blue;
+        }
+
+        #itemsList {
+            display: block;
+            margin-top: 25px;
+            width: 65%;
+            height: 450px;
+            overflow: auto;
+            border: 2px solid;
+            margin: 0 auto;
+        }
+
+        #addItemForm {
+            width: 500px;
+            margin: 15px auto;
+        }
+        #addItem {
+            display: none;
+            position: fixed;
+            overflow: auto;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
         }
     </style>
 </head>
+
 <body>
     <div id="nav-placeholder">
 
@@ -56,60 +147,68 @@
 
     <script>
         $(function () {
-            $("#nav-placeholder").load("navAfterLogin.html");
+            $("#nav-placeholder").load("../shared/navAfterLogin.html");
         });
     </script>
-    <h1>Manage item</h1>
+    <div id="addItem">
+        
+        <form id="addItemForm">
+            <label for="Item_name">Item Name:</label> <span class="closeAddForm" style="float:right;margin-top: -10px;">&times;</span>
+            <input type="text" id="Item_name" name="Item_name" required>
+    
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" required>
+    
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description">
+    
+            <label for="picture">Picture URL:</label>
+            <input type="text" id="picture" name="picture" required>
+    
+            <label for="startPrice">Start Price:</label>
+            <input type="text" id="startPrice" name="startPrice" required>
+    
+            <!-- Add more fields as needed -->
+    
+            <button type="submit">Add Item</button>
+        </form>
+    </div>
+    <h1>Manage Products</h1>
+    
+    <div>
+        <div id="addItemBtn" class="button">Submit product</div>
+    </div>
+    
     <div id="itemsList" class="container"></div>
-    <form id="addItemForm">
-        <label for="Item_name">Item Name:</label>
-        <input type="text" id="Item_name" name="Item_name" required>
-
-        <label for="location">Location:</label>
-        <input type="text" id="location" name="location" required>
-
-        <label for="description">Description:</label>
-        <input type="text" id="description" name="description">
-
-        <label for="picture">Picture URL:</label>
-        <input type="text" id="picture" name="picture" required>
-
-        <label for="startPrice">Start Price:</label>
-        <input type="text" id="startPrice" name="startPrice" required>
-
-        <!-- Add more fields as needed -->
-
-        <button type="submit">Add Item</button>
-    </form>
+    
+    
 
     <script>
-        const interval = setInterval (() =>{
+
         // Fetch items data from the server
         fetch(`/auth/item_by_seller`, {
             method: 'GET',
         })
-        .then(response => response.json())
-        .then(responseData => {
-            let d = ''
-            // Ensure that items is an array
-            d += '<table class="table"> <thead class="tableHeader"><tr>     <th style="width:16%">Image</th> <th style="width:12%">Lot Info</th> <th style="width:12%">Location</th> <th style="width:20%">Description</th>  <th style="width:20%">Sale Info</th> <th style="width:20%">Action</th> </tr> </thead><tbody>'
-            // Update HTML with items data
-            $.each(responseData['items'], function (e, v) {
-            d += '<tr class="table-item"> <td>' + '<p class = "itemInfo" id ="' + v['ID'] + '">' + '<img class="img-fluid" src="' + v['picture'] + '">' + '</p></td>'
-            d += ' <td>' + '<a class = "itemName" id ="' + v['ID'] + '" href="/view_item' + v['ID'] + '">' + v['Item_name'] + '</a></td>'
-            d += ' <td>' + '<p class = "itemLocation" id ="' + v['ID'] + '"><p>' + v['location'] + '</p></p></td>'
-            d += ' <td>' + '<p class = "itemDescription" id ="' + v['ID'] + '"><p>' + v['description'] + '</p></p></td>'
-            d += ' <td>' + '<p class = "itemSaleInfo" id ="' + v['ID'] + '"><p>' + v['timeLeft'] + '</p></p></td>'
-            d += ' <td>' + '<a class = "itemBidder" id ="' + v['ID'] + '" href="/bid_item' + v['ID'] + '">' + '<div class="bid-button">Bid now</div></a></td>'
-            d += '</tr>'
+            .then(response => response.json())
+            .then(responseData => {
+                let d = ''
+                // Ensure that items is an array
+                d += '<table class="table"> <thead class="tableHeader"><tr>     <th style="width:30%">Image</th> <th style="width:15%">Lot Info</th> <th style="width:15%">Location</th>   <th style="width:18%">Sale Info</th> <th style="width:17%">Action</th></tr> </thead><tbody>'
+                // Update HTML with items data
+                $.each(responseData['items'], function (e, v) {
+                    d += '<tr class="table-item"> <td>' + '<p class = "itemInfo" id ="' + v['ID'] + '">' + '<img class="img-fluid" style="width:250px; height:150px" src="' + v['picture'] + '">' + '</p></td>'
+                    d += ' <td>' + '<a class = "itemName" id ="' + v['ID'] + '" href="/view_item' + v['ID'] + '">' + v['Item_name'] + '</a></td>'
+                    d += ' <td>' + '<p class = "itemLocation" id ="' + v['ID'] + '"><p>' + v['location'] + '</p></p></td>'
+                    // d += ' <td>' + '<p class = "itemDescription" id ="' + v['ID'] + '"><p>' + v['description'] + '</p></p></td>'
+                    d += ' <td>' + '<p class = "itemSaleInfo" id ="' + v['ID'] + '"><p>' + v['timeLeft'] + '</p></p></td>'
+                    d += ' <td>' + '<a class = "itemBidder" id ="' + v['ID'] + '" href="/edit_item' + v['ID'] + '">' + '<div class="button edit-btn">Edit</div></a>' + '<a class = "itemBidder" id ="' + v['ID'] + '" href="/delete_item' + v['ID'] + '">' + '<div class="button delete-btn">Delete</div></a></td>'
+                    d += '</tr>'
 
-            });
-            d += '</tbody></table>'
-            document.getElementById('itemsList').innerHTML = d;
-        })
-        .catch(error => console.error('Error fetching items:', error));
-
-        }, 1000);
+                });
+                d += '</tbody></table>'
+                document.getElementById('itemsList').innerHTML = d;
+            })
+            .catch(error => console.error('Error fetching items:', error));
 
 
         document.getElementById('addItemForm').addEventListener('submit', async function (event) {
@@ -144,6 +243,24 @@
                 alert('Failed to add item.');
             }
         });
+
+        var addItem = document.getElementById("addItem");
+        var closeAddForm = document.getElementsByClassName("closeAddForm")[0]
+        var addBtn = document.getElementById("addItemBtn")
+        addBtn.onclick = function() {
+            addItem.style.display = "block";
+        }
+        closeAddForm.onclick = function() {
+            addItem.style.display = "none";
+        }
+        window.onclick = function (event) {
+            if (event.target == addItem) {
+                addItem.style.display = "none";
+                console.log = "hello"
+            }
+            console.log = "hello"
+        }
     </script>
 </body>
+
 </html>
