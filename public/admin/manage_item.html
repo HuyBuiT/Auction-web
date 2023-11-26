@@ -26,13 +26,9 @@
             border-radius: 5px;
         }
 
-        label {
-            
-        }
+        label {}
 
-        input {
-            
-        }
+        input {}
 
         .button {
             display: inline;
@@ -46,26 +42,44 @@
 
         #content {
             border: 1px solid black;
-            width: 600px;
+            width: 80%;
             height: 300px;
             overflow: auto;
             margin: 20px auto;
         }
 
+
+
         .sessionTable {
             width: 100%;
+            border-collapse: collapse;
         }
-        #addBtn {
-            margin-left: 40%;
+
+        .sessionTable th,
+        .sessionTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
         }
-        #deleteBtn {
+
+        .sessionTable tbody tr:hover {
+            background: #EDAD05;
+            cursor: pointer;
+        }
+        #approveBtn {
+            margin-left: 5%;
+        }
+
+        #rejectBtn {
             background-color: red;
-            margin-left: 40%;
+            margin-left: 30%;
         }
+
         #saveBtn {
             background-color: blue;
-            margin-left: 10%;
+            margin-left: 15%;
         }
+
         .addSessionBtn {
             display: inline;
             background-color: #4caf50;
@@ -82,14 +96,20 @@
             position: fixed;
             text-align: center;
         }
+
         .addSessionForm {
             width: 50%;
             margin: 15px auto;
         }
+
         .tableHeader {
-                background: linear-gradient(90deg, #0586EC 0%, #531BB0 100%);
-                color: white;
-            }
+            background: linear-gradient(90deg, #0586EC 0%, #531BB0 100%);
+            color: white;
+        }
+        td {
+            font-weight: 600;
+            vertical-align: center;
+        }
     </style>
 </head>
 
@@ -105,18 +125,20 @@
     </script>
     <h1> Manage Items</h1>
     <table></table>
-    
+
     </div>
     <!-- <div class="addSessionLine">
         <div class="addSessionBtn">Add auction time
         </div>
     </div> -->
-    <div id="saveBtn" class="button">Save</div>
+
 
     <div id="content"></div>
+
     <div id="rejectBtn" class="button">Reject</div>
     <div id="approveBtn" class="button">Approve</div>
-    
+    <div id="saveBtn" class="button">Save</div>
+
 
     <script>
         var adminID = 0;
@@ -130,13 +152,13 @@
                     console.log(data["sessions"][0].admin_ID); //42
                     console.log(adminID); //42
                     let d = '<table class="sessionTable">';
-                    d += '<thead class = "tableHeader"> <tr> <th class="thID">ID</th> <th  class="thName">Name</th> <th  class="thSessionDate">Session Date(mm/dd/yyyy)</th> <th  class="thStatus">Status</th> </tr> </thead> <tbody>'
+                    d += '<thead class = "tableHeader"> <tr> <th class="thID">ID</th> <th  class="thName">Location</th> <th  class="thSessionDate">Session Date (mm/dd/yyyy)</th> <th  class="thStatus">Status</th> </tr> </thead> <tbody>'
                     $.each(data["sessions"], function (e, v) {
                         d += '<tr>'
-                        d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['ID'] + '</th>'
-                        d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Name'] + '</th>'
-                        d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Session_date'] + '</th>'
-                        d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Status'] + '</th>'
+                        d += '<td>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + '<p id ="' + v['ID'] + '">' + v['ID'] + '</p>' + '</a></td>'
+                        d += '<td>' + '<p id ="' + v['ID'] + '">' + v['Name'] + '</p></td>'
+                        d += '<td>' + '<p id ="' + v['ID'] + '">' + v['Session_date'] + '</p></td>'
+                        d += '<td>' + '<p id ="' + v['ID'] + '">' + v['Status'] + '</p></td>'
 
                         d += '</tr>'
 

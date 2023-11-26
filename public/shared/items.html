@@ -8,11 +8,13 @@
   <script src="//code.jquery.com/jquery.min.js"></script>
 
   <style>
-    p
-    .nav-link.active {
+    p .nav-link.active {
       color: white;
     }
-    .table,.table th,.table td {
+
+    .sessionTable,
+    .sessionTable th,
+    .sessionTable td {
       border: 1px solid black;
       border-collapse: collapse;
     }
@@ -21,37 +23,32 @@
       background: linear-gradient(90deg, #0586EC 0%, #531BB0 100%);
       color: white;
     }
-    .table{
+
+    .sessionTable {
 
       width: 100%;
       text-align: center;
-      
+
     }
+
     td {
-      vertical-align:middle
+      vertical-align: middle
     }
 
     .table-item {
       margin-top: 10px;
-      
+
     }
-    p, a {
+
+    p,
+    a {
       font-size: 1.2rem;
     }
+
     a.itemName {
       text-decoration: none;
       color: blue;
     }
-
-    /* .itemDescription{
-
-    }
-
-    .itemLocation{
-
-    }
-
-    .itemSaleInfo{} */
 
     .bid-button {
       display: inline-block;
@@ -63,7 +60,6 @@
       font-size: 14px;
       border-radius: 5px;
     }
-
   </style>
 </head>
 
@@ -71,28 +67,28 @@
   <div id="nav-placeholder">
   </div>
   <script>$(function () {
-    $("#nav-placeholder").load("../shared/navAfterLogin.html");
-  });</script>
+      $("#nav-placeholder").load("../shared/navAfterLogin.html");
+    });</script>
   <h1>Auction Items</h1>
   <div id="itemsList" style="margin-top: 30px;" class="container"></div>
 
   <script>
-    
+
 
 
     const pathArray = window.location.pathname.split('n');
     console.log(pathArray);
     const session_ID = pathArray[pathArray.length - 1];
-    const interval = setInterval (() =>{
-      // Fetch items data from the server
-      fetch(`/auth/item_by_session/${session_ID}`, {
-        method: 'GET',
-      })
+
+    // Fetch items data from the server
+    fetch(`/auth/item_by_session/${session_ID}`, {
+      method: 'GET',
+    })
       .then(response => response.json())
       .then(responseData => {
         let d = ''
         // Ensure that items is an array
-        d += '<table class="table"> <thead class="tableHeader"><tr>     <th style="width:16%">Image</th> <th style="width:12%">Lot Info</th> <th style="width:12%">Location</th> <th style="width:20%">Description</th>  <th style="width:20%">Sale Info</th> <th style="width:20%">Action</th> </tr> </thead><tbody>'
+        d += '<table class="sessionTable"> <thead class="tableHeader"><tr>     <th style="width:16%">Image</th> <th style="width:12%">Lot Info</th> <th style="width:12%">Location</th> <th style="width:20%">Description</th>  <th style="width:20%">Sale Info</th> <th style="width:20%">Action</th> </tr> </thead><tbody>'
         // Update HTML with items data
         $.each(responseData['items'], function (e, v) {
           d += '<tr class="table-item"> <td>' + '<p class = "itemInfo" id ="' + v['ID'] + '">' + '<img class="img-fluid" src="' + v['picture'] + '">' + '</p></td>'
@@ -114,7 +110,7 @@
       })
       .catch(error => console.error('Error fetching items:', error));
 
-    }, 1000);
+
   </script>
 
 </body>
