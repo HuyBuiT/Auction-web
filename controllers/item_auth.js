@@ -78,7 +78,7 @@ const updateItemByIdAsync = (itemId, newData) => {
 // Use async/await to call the updateItemById function
 exports.updateItemById = async (req, res) => {
     try {
-        if(req.user == null || req.user.isAdmin == 1){
+        if(req.user == null){
             
             res.status(401).json({message: "Unauthorized"});
         }
@@ -222,7 +222,7 @@ exports.deleteItemById = async (req, res) => {
             res.status(401).json({message: "Unauthorized"});
         }
         else{
-        const itemId = req.body.ID; // You should extract the item ID from the request as needed
+        const itemId = req.params.item_ID; // You should extract the item ID from the request as needed
         await deleteItemByIdAsync(itemId);
         // Send a success response to the client
         res.status(200).json({ message: `Item with ID ${itemId} has been deleted.` });
@@ -309,9 +309,22 @@ exports.getAllItemsBySeller = async (req, res) => {
 
         results.forEach(item => {
             const timeLeft = calculateTimeLeft(item.End_time);
-            if (timeLeft <= 0) {
-                item.timeLeft = "Past";
-            } else {
+            const timeParts = timeLeft.split(':');
+
+            const hoursLeft = parseInt(timeParts[0], 10);
+            const minutesLeft = parseInt(timeParts[1], 10);
+            if (hoursLeft <0 || minutesLeft <0){
+                item.timeLeft = "Done";
+                if (item.soldPrice != item.currentPrice){
+                    item.soldPrice = item.currentPrice;
+                    const newData = {
+                    soldPrice: item.soldPrice,
+                    // Add more key-value pairs as needed
+                    };
+                    updateItemByIdAsync(item.ID,newData);
+                }
+                
+            } else{
                 item.timeLeft = timeLeft;
             }
         });

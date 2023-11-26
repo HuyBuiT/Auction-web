@@ -167,6 +167,12 @@
     
             <label for="startPrice">Start Price:</label>
             <input type="text" id="startPrice" name="startPrice" required>
+
+            <label for="startPrice">Start Time:</label>
+            <input type="time" id="Start_time" name="Start_time" required step="2">
+
+            <label for="startPrice">End Time:</label>
+            <input type="time"  id="End_time" name="End_time" required step="2">
     
             <!-- Add more fields as needed -->
     
@@ -185,10 +191,11 @@
 
     <script>
 
-        // Fetch items data from the server
-        fetch(`/auth/item_by_seller`, {
-            method: 'GET',
-        })
+        function getItem() {
+            // Fetch items data from the server
+            fetch(`/auth/item_by_seller`, {
+                method: 'GET',
+            })
             .then(response => response.json())
             .then(responseData => {
                 let d = ''
@@ -198,10 +205,9 @@
                 $.each(responseData['items'], function (e, v) {
                     d += '<tr class="table-item"> <td>' + '<p class = "itemInfo" id ="' + v['ID'] + '">' + '<img class="img-fluid" style="width:250px; height:150px" src="' + v['picture'] + '">' + '</p></td>'
                     d += ' <td>' + '<a class = "itemName" id ="' + v['ID'] + '" href="/view_item' + v['ID'] + '">' + v['Item_name'] + '</a></td>'
-                    d += ' <td>' + '<p class = "itemLocation" id ="' + v['ID'] + '"><p>' + v['location'] + '</p></p></td>'
-                    // d += ' <td>' + '<p class = "itemDescription" id ="' + v['ID'] + '"><p>' + v['description'] + '</p></p></td>'
-                    d += ' <td>' + '<p class = "itemSaleInfo" id ="' + v['ID'] + '"><p>' + v['timeLeft'] + '</p></p></td>'
-                    d += ' <td>' + '<a class = "itemBidder" id ="' + v['ID'] + '" href="/edit_item' + v['ID'] + '">' + '<div class="button edit-btn">Edit</div></a>' + '<a class = "itemBidder" id ="' + v['ID'] + '" href="/delete_item' + v['ID'] + '">' + '<div class="button delete-btn">Delete</div></a></td>'
+                    d += ' <td>' + '<p class = "itemLocation" id ="' + v['ID'] + '">' + v['location'] + '</p></td>'
+                    d += ' <td>' + '<p class = "itemSaleInfo" id ="' + v['ID'] + '">' + v['timeLeft'] + '</p></td>'
+                    d += ' <td>' + '<a class = "itemBidder" id ="' + v['ID'] + '" href="/edit_item' + v['ID'] + '">' + '<div class="button edit-btn">Edit</div></a>' + '<a class = "itemBidder" id ="' + v['ID'] + '" href="/auth/delete_item/' + v['ID'] + '">' + '<div class="button delete-btn">Delete</div></a></td>'
                     d += '</tr>'
 
                 });
@@ -209,7 +215,27 @@
                 document.getElementById('itemsList').innerHTML = d;
             })
             .catch(error => console.error('Error fetching items:', error));
-
+        }
+        const getAllItem = getItem();
+        const interval = setInterval(() =>{
+            fetch(`/auth/item_by_seller`, {
+            method: 'GET',
+            })
+            .then(response => response.json())
+            .then(responseData => {
+                console.log (responseData);
+                $.each(responseData['items'], function (e, v) {
+                    const elementsByQuery = document.querySelectorAll('.itemSaleInfo');
+                    elementsByQuery.forEach(element => {
+                        if (element.id == v['ID']){
+                            element.innerHTML = v['timeLeft'];
+                        }
+                    });
+                });
+                
+            })
+            .catch(error => console.error('Error fetching items:', error));
+        }, 1000);
 
         document.getElementById('addItemForm').addEventListener('submit', async function (event) {
             event.preventDefault();
@@ -219,7 +245,7 @@
             formData.forEach((value, key) => {
                 itemData[key] = value;
             });
-
+            console.log("itemData",itemData);
             try {
                 const response = await fetch('/auth/add_item', {
                     method: 'POST',
@@ -232,6 +258,7 @@
                 if (response.ok) {
                     const result = await response.json();
                     console.log(result);
+                    getItem();
                     alert('New item added successfully!');
                 } else {
                     const errorData = await response.json();

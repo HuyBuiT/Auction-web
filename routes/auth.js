@@ -31,6 +31,6 @@ router.post('/update_item',userController.isLoggedIn, itemController.updateItemB
 router.get('/all_items',itemController.getAllItems);
 router.get('/item_by_ID/:item_ID', itemController.getItemsByID);
 router.get('/item_by_session/:session_ID', itemController.getAllItemsBySession);
-router.post('/delete_item',userController.isLoggedIn, itemController.deleteItemById);
+router.post('/delete_item:item_ID',userController.isLoggedIn, itemController.deleteItemById);
 router.get('/item_by_seller',userController.isLoggedIn, itemController.getAllItemsBySeller);
 module.exports = router;
