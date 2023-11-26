@@ -104,7 +104,6 @@
         // Extract item ID from the URL
         const pathArray = window.location.pathname.split('m');
         const item_ID = pathArray[pathArray.length - 1];
-        console.log(item_ID);
 
 
         // Fetch item data from the server
@@ -146,18 +145,18 @@
                 }
             })
             .catch(error => console.error('Error fetching item details:', error));
+
+
         function getItemDetail(item_ID) {
             fetch(`/auth/item_by_ID/${item_ID}`, {
                 method: 'GET',
             })
                 .then(response => response.json())
                 .then(responseData => {
-                    // Ensure that items is an array
-                    const items = Array.isArray(responseData.items) ? responseData.items : [];
 
                     // Check if there's at least one item
-                    if (items.length > 0) {
-                        const item = items[0];
+                    if (responseData) {
+                        const item = responseData.items;
 
                         // Update HTML with item data
                         const itemCurrentPrice = document.querySelector('.itemCurrentPrice');
@@ -169,9 +168,8 @@
                         <div class="itemSoldPrice"><label>Sold Price: </label><span> ${item.soldPrice}</span></div>
                     `
 
-                            ;
                         itemCurrentPrice.innerHTML = itemCurrentPriceHTML;
-                        itemSoldPrice.innerHTML = itemSoldPriceHTML
+                        itemSoldPrice.innerHTML = itemSoldPriceHTML;
                     } else {
                         console.error('No item found with the given ID');
                     }
