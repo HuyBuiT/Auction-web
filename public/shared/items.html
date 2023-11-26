@@ -80,7 +80,8 @@
     console.log(pathArray);
     const session_ID = pathArray[pathArray.length - 1];
 
-    // Fetch items data from the server
+    function getAllItem() {
+      // Fetch items data from the server
     fetch(`/auth/item_by_session/${session_ID}`, {
       method: 'GET',
     })
@@ -109,6 +110,11 @@
         document.getElementById('itemsList').innerHTML = d;
       })
       .catch(error => console.error('Error fetching items:', error));
+    }
+
+    const item = setInterval( () => {
+      getAllItem();
+    }, 1000);
 
 
   </script>
