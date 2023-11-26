@@ -100,7 +100,12 @@
           d += ' <td>' + '<p class = "itemLocation" id ="' + v['ID'] + '"><p>' + v['location'] + '</p></p></td>'
           d += ' <td>' + '<p class = "itemDescription" id ="' + v['ID'] + '"><p>' + v['description'] + '</p></p></td>'
           d += ' <td>' + '<p class = "itemSaleInfo" id ="' + v['ID'] + '"><p>' + v['timeLeft'] + '</p></p></td>'
-          d += ' <td>' + '<a class = "itemBidder" id ="' + v['ID'] + '" href="/bid_item' + v['ID'] + '">' + '<div class="bid-button">Bid now</div></a></td>'
+          if (v['timeLeft'] == "Done") {
+            d+= ' <td> Disable</td>'
+          } else {
+            d += ' <td>' + '<a class = "itemBidder" id ="' + v['ID'] + '" href="/bid_item' + v['ID'] + '">' + '<div class="bid-button">Bid now</div></a></td>'
+          }
+         
           d += '</tr>'
 
         });

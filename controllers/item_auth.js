@@ -78,7 +78,7 @@ const updateItemByIdAsync = (itemId, newData) => {
 // Use async/await to call the updateItemById function
 exports.updateItemById = async (req, res) => {
     try {
-        if(req.user == null || req.user.isSeller == 0){
+        if(req.user == null || req.user.isAdmin == 1){
             
             res.status(401).json({message: "Unauthorized"});
         }
@@ -130,38 +130,6 @@ exports.getAllItems = async (req, res) => {
     }
 };
 
-// Create a Promise-based function to get items by name
-// const getItemsByIDAsync = (ID) => {
-//     return new Promise((resolve, reject) => {
-//         db.query('SELECT * FROM item WHERE ID = ?', [ID], (err, results) => {
-//             if (err) {
-//                 console.log(err);
-//                 reject(err);
-//             } else {
-//                 if (results.length === 0) {
-//                     console.log("No items found for the given ID.");
-//                 }
-//                 results['img'] = [];
-//                 db.query('SELECT picture FROM item_picture WHERE item_ID = ?', [ID], (err, pictures) => {
-//                     if (err) {
-//                         console.log(err);
-//                         reject(err);
-//                     } else {
-//                         let i = 0;
-//                         pictures.forEach(item =>{
-//                             results['img'][i] = item.picture;
-//                             i++;
-//                         })
-//                         console.log (results);
-//                         resolve(results);
-                        
-//                     }
-//                 });
-                
-//             }
-//         });
-//     });
-// };
 
 const getItemsByIDAsync = (ID) => {
     return new Promise((resolve, reject) => {
@@ -296,6 +264,15 @@ exports.getAllItemsBySession = async(req,res) => {
             const minutesLeft = parseInt(timeParts[1], 10);
             if (hoursLeft <0 || minutesLeft <0){
                 item.timeLeft = "Done";
+                if (item.soldPrice != item.currentPrice){
+                    item.soldPrice = item.currentPrice;
+                    const newData = {
+                    soldPrice: item.soldPrice,
+                    // Add more key-value pairs as needed
+                    };
+                    updateItemByIdAsync(item.ID,newData);
+                }
+                
             } else{
                 item.timeLeft = timeLeft;
             }

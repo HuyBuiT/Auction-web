@@ -61,7 +61,7 @@ exports.register = (req, res) => {
             if (err) {
                 console.log(err);
             } else {
-                return res.sendFile("login.html", { root: './public/' }); //register successfully
+                return res.sendFile("login.html", { root: './public/shared' }); //register successfully
             }
         })
     })

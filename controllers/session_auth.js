@@ -33,7 +33,7 @@ exports.getAllSessions = async (req, res) => {
             var date = new Date(inputDateString);
 
             // Get day, month, and year components
-            var day = date.getUTCDate();
+            var day = date.getUTCDate() + 1;
             var month = date.getUTCMonth() + 1; // Months are zero-based, so we add 1
             var year = date.getUTCFullYear();
 
