@@ -46,4 +46,7 @@ router.get('/manage_category',authController.isLoggedIn,(req,res) => {
 router.get('/manage_item',authController.isLoggedIn,(req,res) => {
     res.sendFile("manage_item.html",{root: './public/seller'});
 })
+router.get('/manage_category', authController.isLoggedIn, (req,res) => {
+    res.sendFile("manage_category.html", {root:'./public/admin'});
+})
 module.exports = router;

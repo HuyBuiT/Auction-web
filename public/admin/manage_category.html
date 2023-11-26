@@ -111,7 +111,14 @@
         <div class="addSessionBtn">Add auction time
         </div>
     </div> -->
-    <div id="addBtn" class="button">Add Category</div>
+    <form id="addCateForm">
+        <label for="Cat_Name">Category Name:</label> <span class="closeAddForm" style="float:right;margin-top: -10px;">&times;</span>
+        <input type="text" id="Cat_Name" name="Cat_Name" required>
+
+        <!-- Add more fields as needed -->
+
+        <button id="addBtn" class="button" type="submit">Add Category</button>
+    </form>
 
     <div id="content"></div>
     <div id="deleteBtn" class="button">Delete</div>
@@ -121,22 +128,18 @@
     <script>
         var adminID = 0;
         function fetchDataAndProcess() {
-            fetch('/auth/session_by_admin', {
+            fetch('/auth/category_by_admin', {
                 method: 'GET',
             })
                 .then(response => response.json()) // Parse the response as JSON
                 .then(data => {
-                    adminID = data["sessions"][0].admin_ID;
-                    console.log(data["sessions"][0].admin_ID); //42
-                    console.log(adminID); //42
+                    adminID = data["categories"][0].admin_ID;
                     let d = '<table class="sessionTable">';
-                    d += '<thead class = "tableHeader"> <tr> <th class="thID">ID</th> <th  class="thName">Name</th> <th  class="thSessionDate">Session Date(mm/dd/yyyy)</th> <th  class="thStatus">Status</th> </tr> </thead> <tbody>'
-                    $.each(data["sessions"], function (e, v) {
+                    d += '<thead class = "tableHeader"> <tr> <th class="thID">ID</th> <th  class="thName">Name</th> <th  class="thSessionDate">Description</th> </tr> </thead> <tbody>'
+                    $.each(data["categories"], function (e, v) {
                         d += '<tr>'
-                        d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['ID'] + '</th>'
-                        d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Name'] + '</th>'
-                        d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Session_date'] + '</th>'
-                        d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Status'] + '</th>'
+                        d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['ID'] + '</th>'  //wrong href in <a>
+                        d += '<th>' + '<a id ="' + v['ID'] + '" href="/session' + v['ID'] + '">' + v['Cat_Name'] + '</th>' //wrong href in <a>
 
                         d += '</tr>'
 
@@ -147,39 +150,38 @@
                 .catch(error => console.error('Error:', error));
         }
         const data = fetchDataAndProcess();
-        console.log(adminID); //0
-        document.getElementById('addSessionForm').addEventListener('submit', async function (event) {
+        document.getElementById('addCateForm').addEventListener('submit', async function (event) {
             event.preventDefault();
 
             const formData = new FormData(this);
-            const sessionData = {};
+            const categoryData = {};
 
             formData.forEach((value, key) => {
-                sessionData[key] = value;
+                categoryData[key] = value;
             });
-            sessionData['admin_ID'] = adminID;
+            categoryData['admin_ID'] = adminID;
             try {
-                const response = await fetch('/auth/add_session', {
+                const response = await fetch('/auth/add_category', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(sessionData),
+                    body: JSON.stringify(categoryData),
                 });
 
                 if (response.ok) {
                     const result = await response.json();
                     console.log(result);
-                    alert('New session added successfully!');
+                    alert('New category added successfully!');
                     fetchDataAndProcess();
                 } else {
                     const errorData = await response.json();
-                    console.error('Error adding session:', errorData);
-                    alert('Failed to add session.');
+                    console.error('Error adding category:', errorData);
+                    alert('Failed to add category.');
                 }
             } catch (error) {
-                console.error('Error adding session:', error);
-                alert('Failed to add session.');
+                console.error('Error adding category:', error);
+                alert('Failed to add category.');
             }
         });
 

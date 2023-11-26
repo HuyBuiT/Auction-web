@@ -2,6 +2,7 @@ const express = require("express");
 const userController = require("../controllers/user_auth.js");
 const sessionController = require("../controllers/session_auth.js");
 const itemController = require("../controllers/item_auth.js");
+const cateController = require("../controllers/category_auth.js");
 const router = express.Router();
 
 //user
@@ -20,6 +21,10 @@ router.post('/add_session',userController.isLoggedIn, sessionController.addNewSe
 router.post('/update_session',userController.isLoggedIn, sessionController.updateSessionById);
 router.get("/session_by_admin", userController.isLoggedIn, sessionController.getSessionsByAdminID);
 
+//category
+
+router.post('/add_category', userController.isLoggedIn, cateController.addNewCategory );
+router.get('/category_by_admin', userController.isLoggedIn, cateController.getCateByAdminID);
 //item
 router.post('/add_item',userController.isLoggedIn, itemController.addNewItem);
 router.post('/update_item',userController.isLoggedIn, itemController.updateItemById);
